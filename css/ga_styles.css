@@ -1,0 +1,77 @@
+body, h1, h2, h3, h4, h5, h6, ul, li, a, p, em{ padding:0; margin:0; }
+body{background:#c3c3c3; font-family:arial; font-size:1em}
+ul, li{ list-style-type:none}
+em{ display:block}
+h2{ color:#333; font-size:0.935em}
+img, a{ border:0}
+a{ text-decoration:none}
+.clearfix:after {content: ".";display: block;clear: both;visibility: hidden;line-height: 0;	height: 0;}
+#ga_outerWrapper{ margin:15px auto 0; background:#fff url(../images/bg-aside.gif) repeat-y 0 0; overflow:hidden; width:1200px}
+	.ga_innerWrapper{ background:url(../images/bg-innerWrapper.gif) repeat-x 0 0; overflow:hidden}
+	#ga_logo{ float:left; padding:0 0 10px 9px; }
+	#ga_aside{ float:left; width:202px; clear:left}
+	#search{ margin:12px 0 0 10px}
+	#searchBox{ border-top:1px solid #a3a3a3; border-left:1px solid #a3a3a3; border-right:1px solid #cccccc; border-bottom:1px solid #cccccc; background:url(../images/ico_search.gif) no-repeat 3% 50%; padding:8px 0 8px 25px}
+	#ga_mainContent{ width:auto; float:left; margin-top:-41px; padding-bottom:35px; position:relative}
+	#ga_mainContent{ margin-top:-40px;}
+
+		.mainNav{ margin-right:3px}
+			.mainNav li{ display:block; background:url(../images/bg-nav.gif) repeat-x 0 0}
+			.mainNav li:hover, .mainNav li.active{background:url(../images/bg-navHover.gif) repeat-x 0 0}
+			.mainNav li a{ text-decoration:none; color:#666; font-size:0.938em; font-weight:bold; padding:13px 0 11px 13px; display:block}
+		.tabs{ overflow:hidden}
+			.tabs li{ float:left; text-align:center; background:#6991c3; margin:0 4px 0 0;}
+			.tabs li a{ text-decoration:none; color:#fff; font-size:0.875em; padding:8px 20px 5px; display:block; border-top:6px solid #c3c3c3}
+			.tabs li a:hover, .tabs li a.selected{ color:#333; background:#fff; border-top:6px solid #fff}
+		#tabContent{ margin:36px 19px 0 23px; width:955px }
+
+			#bookingResults{ overflow:hidden; margin-bottom:25px}
+				#bookingResults h2{ padding-bottom:5px}
+				#bookingResults h3{color:#387bc3; font-size:0.935em;}
+				#bookingResults ul{border:1px solid #dbdbdb; float:left; border-radius:3px;}
+				#bookingResults ul li{ float:left; border-right:1px solid #ebebeb; margin:16px 0 14px; padding:0 22px;}
+				#bookingResults em{ font-weight:bold; font-size:3.125em; font-style:normal }				
+				#bookingResults .dec{ }
+				#bookingResults small, .ov_Report small{font-size:0.932em; padding-left:15px; display:block}
+				#bookingResults small.inc, .ov_Report small.inc{color:#489823; background:url(../images/ico_inc.gif) no-repeat 0 50%;}
+				#bookingResults small.dec, .ov_Report small.dec{color:#cc3333; background:url(../images/ico_dec.gif) no-repeat 0 50%;}
+		.segments{ border:1px solid #e1e1e1; background:#f8f7f5; margin-bottom:16px; padding:2px 0px; width:100%; float:left}
+			.segments li{ float:left; padding:0 8px}
+			.segments label, #userType span{ font-size:0.75em; color:#333; float:left; line-height:25px}
+			.segments select{ border-radius:3px; border:1px solid #d8d8d8; width:200px; padding:3px}
+			#userType{float:right; padding:0 20px 0 0}			
+			.userType{border:1px solid #d4d4d4; border-radius:2px; float:left; background:url(../images/bg-userType.gif) repeat-x 0 0; overflow:hidden; margin:0 0 0 8px}
+				.userType a{color:#666; font-size:0.75em; padding:5px 16px; float:left; text-decoration:none; border-right:1px solid #cccccc}
+				.userType a.last{ border-right:0}			
+			#go{ border-radius:3px; border:1px solid #d8d8d8; padding:3px; font-size:0.75em; font-weight:bold; color:#666; float:left; margin:2px 0 0; background:url(../images/bg-userType.gif) repeat-x 0 0;}
+		#overview{ width:auto; overflow:hidden}
+			.hgroup{ overflow:hidden; padding-bottom:12px}
+			#overview h2{ float:left; color:#ccc; font-size:1.250em; font-weight:normal; padding-top:9px}
+			#ov_TimeSeries{ float:right; border:1px solid #ccc; border-radius:3px; overflow:hidden; background:url(../images/bg-timeSeries.gif) repeat-x 0 0;}
+				#ov_TimeSeries a{ text-decoration:none;float:left; color:#444; font-size:0.75em; font-weight:bold; text-decoration:none; border-right:1px solid #ccc; padding:5px 7px}
+				#ov_TimeSeries a.last, #bookingResults ul li.last{ border-right:none}
+				#ov_TimeSeries a:hover, .userType a:hover{background:url(../images/bg-timeSeriesOver.gif) repeat-x 0 0;}
+			.ov_Report{ float:left; clear:left}
+				.ov_Report ul{ overflow:hidden; display:block}
+					.ov_Report ul li{ float:left; border:1px solid #f1eff1; border-radius:3px; margin:0 9px 9px 0; padding:4px 8px 8px 9px; width:134px}
+					.ov_Report h4{font-size:0.935em; color:#666; padding-bottom:12px}
+					.ov_Report em{ font-style:normal; color:#333; font-size:1.875em; padding:0 0 3px 0}
+					.ov_Report a.view{color: #3366ff; font-size:0.688em; float:right; text-decoration:none; margin-top:24px}						
+			.ov_graph{ width:466px; border:1px solid #ebe8eb; border-radius:3px; float:left}
+				.ov_graph h4, #ov_chart li h4{color:#666; font-size:0.875em; padding:3px 0 0 9px}
+			#ov_chart{ overflow:hidden; clear:both}
+			#ov_chart li{ width:309px; margin:19px 10px 0 0; border:1px solid #ebe8eb; border-radius:3px; float:left}
+			#ov_chart li.last{ margin:19px 0 0 0}
+			.figHolder{text-align:center}
+
+/*datepicker*/
+#date-range, #date-range_2 {position:relative;}
+  .date-range-field, .date-range-field_2 {width: 290px; height: 26px; overflow: hidden; position: relative; cursor:pointer; border: 1px solid #CCCCCC; border-radius: 5px 5px 5px 5px;}
+  .date-range-field a, .date-range-field_2 a  { color:#B2B2B2; background-color:#F7F7F7; text-align:center; display: block; position: absolute; width: 26px; height: 23px; top: 0; right: 0; text-decoration: none; padding-top:6px; border-radius: 0 5px 5px 0;}
+  .date-range-field span, .date-range-field_2 span { font-size: 12px; font-weight: bold; color: #404040; position: relative; top: 0; height: 26px; line-height: 26px; left: 5px; width: 250px; text-align: center; }
+  #datepicker-calendar, #datepicker-calendar_2{ position: absolute; top: 27px; left: 0; overflow: hidden; width: 334px; height:153px; background-color: #F7F7F7; border: 1px solid #CCCCCC; border-radius: 0 5px 5px 5px; display:none; padding:10px 0 0 10px; z-index:99 }
+      
+  /* Remove default border from the custom widget since we're adding our own. */
+  #datepicker-calendar div.datepicker, #datepicker-calendar_2 div.datepicker { background-color: transparent; border: none; border-radius: 0; padding: 0;  }
+			
+				
