@@ -57,7 +57,12 @@ class Dashboard(object):
         #db.flight_paymentdetails__bookingtime__Commission.find({'_id.summary_range':{'$gte': {'sdate':20121101,'edate':20121101},'$lte': {'sdate':20121105,'edate':20121105}}})
 
     def process(self):
-        self.viewfilter = {'_id.'+key : value for key,value in self.viewfilter.iteritems()}
+        #self.viewfilter = {'_id.'+key : value for key,value in self.viewfilter.iteritems()}
+        # compatibility with python < 2.7
+        self.tmpfilter = dict()
+        for key,value in self.viewfilter.iteritems():
+            self.tmpfilter['_id.'+key] = value
+        self.viewfilter = self.tmpfilter
         # The <main> method
         self.results = self.summarize(summarize_number=self.summarize_number)
         self.results['timestamp'] = self.results['timestamp.'+self.time_frequency]

@@ -15,29 +15,73 @@
   <script src="../js/ga_style.js" type="text/javascript"></script>
   <script type="text/javascript" src="http://www.google.com/jsapi"></script>
   <script type="text/javascript" src="pico/client.js"></script>
-
   <script type="text/javascript">
-  mart = 'flight_paymentdetails';
-  metric1 = 'tickets';
-  metric2 = metric1;
-  timeseries1 = 'bookingtime';
-  timeseries2 = timeseries1;
-  comparisonFlag = 0;
-  today_date = '2012-11-27';
-  timerange1 = ['date',today_date,today_date];
-  timerange2 = timerange1;
-  dimensions = [];
-  persistantfilter = "[]";
-  viewfilter = "nofilter";
-  summarize_number = 1;
 
+  today_date = '2012-11-19';
+  //call to function
   pico.load('handler');
   pico.main = function(){
+  	get_flight_tickets_domestic();
+  	get_flight_tickets_international();
+  	get_bus_tickets();
+  	get_hotel_bookings();
+  }
+
+  function get_flight_tickets_domestic(){
+  	set1 = {'mart':'flight_paymentdetails','metric':'tickets','timeseries':'bookingtime','timerange':['hour',today_date,today_date]};
+  	set2 = {};
+  	dimensions = [];
+  	summarize_number = 1;
+  	persistantfilter = "[['typeoftravel','Domestic']]";
+  	viewfilter = "nofilter";
   	var displayMessage = function(message){
   		console.log(message);
   	}
-  	handler.get_details(mart,metric1,metric2,timeseries1,timeseries2,comparisonFlag,timerange1,timerange2,dimensions,persistantfilter,viewfilter,summarize_number,displayMessage);
+  	handler.get_details(set1,set2,dimensions,persistantfilter,viewfilter,summarize_number,displayMessage);
   }
+
+  function get_flight_tickets_international(){
+  	set1 = {'mart':'flight_paymentdetails','metric':'tickets','timeseries':'bookingtime','timerange':['hour',today_date,today_date]};
+  	set2 = {};
+  	dimensions = [];
+  	summarize_number = 1;
+  	viewfilter = "nofilter";
+  	persistantfilter = "[['typeoftravel','International']]"
+  	var displayMessage = function(message){
+  		console.log(message);
+		f = message[0]['total'][0][1]
+		//alert(f);
+		
+  	}
+  	handler.get_details(set1,set2,dimensions,persistantfilter,viewfilter,summarize_number,displayMessage);
+  }
+
+  function get_bus_tickets(){
+  	set1 = {'mart':'bus_paymentdetails','metric':'tickets','timeseries':'timeoftransaction','timerange':['hour',today_date,today_date]};
+  	set2 = {};
+  	dimensions = [];
+  	summarize_number = 1;
+  	viewfilter = "nofilter";
+  	persistantfilter = "[]";
+  	var displayMessage = function(message){
+  		console.log(message);
+  	}
+  	handler.get_details(set1,set2,dimensions,persistantfilter,viewfilter,summarize_number,displayMessage);
+  }
+
+  function get_hotel_bookings(){
+  	set1 = {'mart':'hotel_paymentdetails','metric':'Room Nights','timeseries':'bookingtime','timerange':['hour',today_date,today_date]};
+  	set2 = {};
+  	dimensions = [];
+  	summarize_number = 1;
+  	viewfilter = "nofilter";
+  	persistantfilter = "[]";
+  	var displayMessage = function(message){
+  		console.log(message);
+  	}
+  	handler.get_details(set1,set2,dimensions,persistantfilter,viewfilter,summarize_number,displayMessage);
+  }
+
   </script>
 
  </head>

@@ -2,31 +2,42 @@ import pico
 import ast
 import settings
 import sys
+import datetime
 sys.path.append(settings.ROOT_DIR+"engine/")
 from engine.dashboard import Dashboard
 import pdb
 
-def get_details(mart,metric1,metric2,timeseries1,timeseries2,comparisonFlag,timerange1,timerange2,dimensions,persistantfilter_list,viewfilter,summarize_number):
+def get_details(set1,set2,dimensions,persistantfilter,viewfilter,summarize_number):
+    if set2 != {}:
+        compare = True
+    else:
+        compare = False
     # chuck out the hyphens (-) from timeranges
-    timerange1 = map(lambda item:item.replace('-',''),timerange1)
-    if comparisonFlag == 1:
-        timerange2 = map(lambda item:item.replace('-',''),timerange2)
+    set1['timerange'] = map(lambda item:item.replace('-',''),set1['timerange'])
+    #convert summarize to int
     summarize_number = int(summarize_number)
     #Convert persistantfilter from list to dict before sending to engine
-    persistantfilter_dict = convert(ast.literal_eval(persistantfilter_list),"list","dictionary")
-    dictionary1,viewfilter1 = call_engine(mart,metric1,timeseries1,timerange1,dimensions,persistantfilter_dict,viewfilter,None)
-    if str(comparisonFlag) == '1':
-        dictionary2,viewfilter2 = call_engine(mart,metric2,timeseries2,timerange2,dimensions,persistantfilter_dict,viewfilter,None)
+    persistantfilter_dict = convert(ast.literal_eval(persistantfilter),"list","dictionary")
+
+    dictionary1,viewfilter1 = call_engine(set1['mart'],set1['metric'],set1['timeseries'],set1['timerange'],dimensions,persistantfilter_dict,viewfilter,None)
+    if compare:
+        set2['timerange'] = map(lambda item:item.replace('-',''),set2['timerange'])
+        dictionary2,viewfilter2 = call_engine(set2['mart'],set2['metric'],set2['timeseries'],set2['timerange'],dimensions,persistantfilter_dict,viewfilter,None)
     else:
         dictionary2 = None
-    dictionary = prepare_to_render(dictionary1,dictionary2,timerange1[0],summarize_number)
+    dictionary = prepare_to_render(dictionary1,dictionary2,set1['timerange'],summarize_number)
 
     # merge persistantfilter_dict and viewfilter_dict.But before that,remove the _id. tag that we get from the raw viewfilter.
     persistantfilter_dict = ast.literal_eval(str(viewfilter1).replace('_id.','')) 
     # Convert persistantfilter from dict to list before sending to javascript
-    persistantfilter_list = convert(persistantfilter_dict,"dictionary","list")
+    persistantfilter = convert(persistantfilter_dict,"dictionary","list")
 
-    return [dictionary,str(persistantfilter_list)]
+    return [dictionary,str(persistantfilter)]
+
+def get_totals(martslist,timerange):
+    # chuck out the hyphens (-) from timeranges
+    timerange = map(lambda item:item.replace('-',''),timerange)
+    return Landing(martslist,timerange).process()
 
 def convert(dataStructure,typeFrom,typeTo):
     if typeFrom == "list" and typeTo == "dictionary":
@@ -77,3 +88,4 @@ def prepare_to_render(d1,d2,frequency,summarize_number):
             listoflists_sorted = sorted(listoflists,key = lambda item:item[1],reverse=True)[:summarize_number] # list slicing - [start:stop:step]
         dnew[dimension] = listoflists_sorted
     return dnew
+
