@@ -23,7 +23,7 @@ a{ text-decoration:none}
 			.tabs li{ float:left; text-align:center; background:#6991c3; margin:0 4px 0 0;}
 			.tabs li a{ text-decoration:none; color:#fff; font-size:0.875em; padding:8px 20px 5px; display:block; border-top:6px solid #c3c3c3}
 			.tabs li a:hover, .tabs li a.selected{ color:#333; background:#fff; border-top:6px solid #fff}
-		#tabContent{ margin:36px 19px 0 23px; width:955px }
+		#tabContent{ /*margin:36px 19px 0 23px; change it back once tabs are enabled*/ width:955px; margin:60px 19px 0 23px }
 
 			#bookingResults{ overflow:hidden; margin-bottom:25px}
 				#bookingResults h2{ padding-bottom:5px}
@@ -44,22 +44,23 @@ a{ text-decoration:none}
 				.userType a{color:#666; font-size:0.75em; padding:5px 16px; float:left; text-decoration:none; border-right:1px solid #cccccc}
 				.userType a.last{ border-right:0}			
 			#go{ border-radius:3px; border:1px solid #d8d8d8; padding:3px; font-size:0.75em; font-weight:bold; color:#666; float:left; margin:2px 0 0; background:url(../images/bg-userType.gif) repeat-x 0 0;}
-		#overview{ width:auto; overflow:hidden}
+		#overview{ float:left; width:100%}
 			.hgroup{ overflow:hidden; padding-bottom:12px}
 			#overview h2{ float:left; color:#ccc; font-size:1.250em; font-weight:normal; padding-top:9px}
 			#ov_TimeSeries{ float:right; border:1px solid #ccc; border-radius:3px; overflow:hidden; background:url(../images/bg-timeSeries.gif) repeat-x 0 0;}
 				#ov_TimeSeries a{ text-decoration:none;float:left; color:#444; font-size:0.75em; font-weight:bold; text-decoration:none; border-right:1px solid #ccc; padding:5px 7px}
 				#ov_TimeSeries a.last, #bookingResults ul li.last{ border-right:none}
-				#ov_TimeSeries a:hover, .userType a:hover{background:url(../images/bg-timeSeriesOver.gif) repeat-x 0 0;}
-			.ov_Report{ float:left; clear:left}
+				#ov_TimeSeries a:hover, #ov_TimeSeries a.active, .userType a:hover{background:url(../images/bg-timeSeriesOver.gif) repeat-x 0 0;}
+			.ov_Report{ float:left; clear:left; width:487px}
 				.ov_Report ul{ overflow:hidden; display:block}
 					.ov_Report ul li{ float:left; border:1px solid #f1eff1; border-radius:3px; margin:0 9px 9px 0; padding:4px 8px 8px 9px; width:134px}
 					.ov_Report h4{font-size:0.935em; color:#666; padding-bottom:12px}
 					.ov_Report em{ font-style:normal; color:#333; font-size:1.875em; padding:0 0 3px 0}
 					.ov_Report a.view{color: #3366ff; font-size:0.688em; float:right; text-decoration:none; margin-top:24px}						
-			.ov_graph{ width:466px; border:1px solid #ebe8eb; border-radius:3px; float:left}
-				.ov_graph h4, #ov_chart li h4{color:#666; font-size:0.875em; padding:3px 0 0 9px}
-			#ov_chart{ overflow:hidden; clear:both}
+			.ov_graph{ width:99.8%; border:1px solid #ebe8eb; border-radius:3px; float:left;}
+			.flights .ov_graph{ width:466px; height:283px}				
+				.ov_graph h4, #ov_chart li h4{color:#666; font-size:0.875em; padding:3px 0 9px}
+			#ov_chart{ overflow:hidden; clear:both; position:relative}
 			#ov_chart li{ width:309px; margin:19px 10px 0 0; border:1px solid #ebe8eb; border-radius:3px; float:left}
 			#ov_chart li.last{ margin:19px 0 0 0}
 			.figHolder{text-align:center}
@@ -70,7 +71,7 @@ a{ text-decoration:none}
   .date-range-field a, .date-range-field_2 a  { color:#B2B2B2; background-color:#F7F7F7; text-align:center; display: block; position: absolute; width: 26px; height: 23px; top: 0; right: 0; text-decoration: none; padding-top:6px; border-radius: 0 5px 5px 0;}
   .date-range-field span, .date-range-field_2 span { font-size: 12px; font-weight: bold; color: #404040; position: relative; top: 0; height: 26px; line-height: 26px; left: 5px; width: 250px; text-align: center; }
   #datepicker-calendar, #datepicker-calendar_2{ position: absolute; top: 27px; left: 0; overflow: hidden; width: 334px; height:153px; background-color: #F7F7F7; border: 1px solid #CCCCCC; border-radius: 0 5px 5px 5px; display:none; padding:10px 0 0 10px; z-index:99 }
-      
+   .date-range-field p{ visibility:hidden}   
   /* Remove default border from the custom widget since we're adding our own. */
   #datepicker-calendar div.datepicker, #datepicker-calendar_2 div.datepicker { background-color: transparent; border: none; border-radius: 0; padding: 0;  }
 			

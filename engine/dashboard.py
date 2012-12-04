@@ -14,8 +14,8 @@ class Dashboard(object):
         self.mart = __import__("marts."+mart,globals(), locals(), [str(mart)], -1)
         self.db = self.conn[self.mart.database]
         self.martname = self.mart.martname
-        self.metric = self.mart.metrics[str(metric)]
-        self.metricname = str(metric)
+        self.metricname = str(metric).replace('_',' ')
+        self.metric = self.mart.metrics[self.metricname]
         self.aggregationtype = self.metric['aggregation_options'][0]
         self.aggregation = self.metric['aggregation_options'][1]
         self.timeseries = str(timeseries)

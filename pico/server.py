@@ -316,6 +316,7 @@ def load_module(module_name):
     return m
 
 def file_handler(path):
+    print "FILE PATH :" +path
     response = Response()
     file_path = ''
     for (url, directory) in STATIC_URL_MAP:
