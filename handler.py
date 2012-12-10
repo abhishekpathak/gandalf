@@ -5,35 +5,37 @@ import sys
 import datetime
 sys.path.append(settings.ROOT_DIR+"engine/")
 from engine.dashboard import Dashboard
+import copy
 import pdb
 
-def get_details(params):
+def get_details(params,extra=None):
     set1 = params['set1']
     set2 = params.get('set2',{})
     dimensions = params.get('dimensions',[])
     persistantfilter = params.get('persistantfilter',{})
-    viewfilter = params.get('viewfilter','nofilter')
+    viewfilter = params.get('viewfilter',{})
     summarize_number = params.get('summarize_number',1)
 
-    if set2 != {}:
-        compare = True
-    else:
-        compare = False
-    # chuck out the hyphens (-) from timeranges
+    if set2 == {}:
+        set2 = copy.deepcopy(set1)
+        frequency = set1['timerange'][0]
+        set1_sdate = datetime.datetime.strptime(set1['timerange'][1],'%Y-%m-%d')
+        set1_edate = datetime.datetime.strptime(set1['timerange'][2],'%Y-%m-%d')
+        set2_edate = set1_sdate-datetime.timedelta(days=1)
+        set2_sdate = set2_edate - datetime.timedelta(days=(set1_edate-set1_sdate).days)
+        set2['timerange'] = [frequency,set2_sdate.strftime('%Y-%m-%d'),set2_edate.strftime('%Y-%m-%d')]
+    # chuck out the hyphens (-) from timeranges and spaces from filters
     set1['timerange'] = map(lambda item:item.replace('-',''),set1['timerange'])
+    set2['timerange'] = map(lambda item:item.replace('-',''),set2['timerange'])
 
     dictionary1,viewfilter1 = call_engine(set1['mart'],set1['metric'],set1['timeseries'],set1['timerange'],dimensions,persistantfilter,viewfilter,None)
-    if compare:
-        set2['timerange'] = map(lambda item:item.replace('-',''),set2['timerange'])
-        dictionary2,viewfilter2 = call_engine(set2['mart'],set2['metric'],set2['timeseries'],set2['timerange'],dimensions,persistantfilter,viewfilter,None)
-    else:
-        dictionary2 = None
+    dictionary2,viewfilter2 = call_engine(set2['mart'],set2['metric'],set2['timeseries'],set2['timerange'],dimensions,persistantfilter,viewfilter,None)
     dictionary = prepare_to_render(dictionary1,dictionary2,set1['timerange'],summarize_number)
 
     # merge persistantfilter_dict and viewfilter_dict.But before that,remove the _id. tag that we get from the raw viewfilter.
     persistantfilter = ast.literal_eval(str(viewfilter1).replace('_id.','')) 
 
-    return {'results':dictionary,'filter':persistantfilter}
+    return {'results':dictionary,'filter':persistantfilter,'extra':extra}
 
 def get_totals(martslist,timerange):
     # chuck out the hyphens (-) from timeranges
@@ -53,7 +55,7 @@ def convert(dataStructure,typeFrom,typeTo):
 
 def call_engine(mart,metric,timeseries,timerange,dimensions,persistantfilter_dict,viewfilter,summarize_number):
     mydashboard = Dashboard(mart =mart, metric = metric, timeseries = timeseries, timerange = timerange, dimensions = dimensions,persistant_filters = persistantfilter_dict,summarize_number = summarize_number)
-    if not viewfilter == 'nofilter':
+    if not viewfilter == {}:
         mydashboard.updatefilter(viewfilter)
     mydashboard.process()
     return mydashboard.results,mydashboard.viewfilter

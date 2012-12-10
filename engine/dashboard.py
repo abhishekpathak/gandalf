@@ -27,6 +27,7 @@ class Dashboard(object):
         self.viewfilter = self.gettimefilter()
         #self.viewfilter = dict(self.viewfilter,**(self.metric.get('extra filters',dict())))
         self.viewfilter = dict(self.viewfilter,**persistant_filters)
+        print self.viewfilter
         self.dimensions = map(str,dimensions)
         self.summarize_number = summarize_number
 
@@ -49,7 +50,10 @@ class Dashboard(object):
 
 
     def gettimefilter(self):
-        timefilter = {'summary_range': {'sdate':int(self.timerange[1]),'edate':int(self.timerange[2])}}
+        try:
+            timefilter = {'summary_range': {'sdate':int(self.timerange[1]),'edate':int(self.timerange[2])}}
+        except:
+            pdb.set_trace()
         data = self.collection.find_one(timefilter)
         if not data:
             timefilter = {'summary_range':{'$gte': {'sdate':int(self.timerange[1]),'edate':int(self.timerange[1])},'$lte': {'sdate':int(self.timerange[2]),'edate':int(self.timerange[2])}}}
@@ -84,12 +88,12 @@ class Dashboard(object):
             results = results['result']
             
             # sorting and giving top n results
-            if summarize_number:
-                if dimension == "timestamp" and self.time_frequency == "dayofweek" :
-                    results = sorted(results,key = lambda item:settings.weekmap[item[0]],reverse=False)
-                elif dimension == "timestamp":
-                    results = sorted(results,key = lambda item:item[0],reverse=False)
-                else:
+            if dimension == "timestamp" and self.time_frequency == "dayofweek" :
+                results = sorted(results,key = lambda item:settings.weekmap[item[0]],reverse=False)
+            elif dimension == "timestamp":
+                results = sorted(results,key = lambda item:item[0],reverse=False)
+            else:
+                if summarize_number:
                     results = sorted(results,key = lambda item:item[1],reverse=True)[:summarize_number] # list slicing - [start:stop:step]
 
             # rounding off

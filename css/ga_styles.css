@@ -14,7 +14,6 @@ a{ text-decoration:none}
 	#searchBox{ border-top:1px solid #a3a3a3; border-left:1px solid #a3a3a3; border-right:1px solid #cccccc; border-bottom:1px solid #cccccc; background:url(../images/ico_search.gif) no-repeat 3% 50%; padding:8px 0 8px 25px}
 	#ga_mainContent{ width:auto; float:left; margin-top:-41px; padding-bottom:35px; position:relative}
 	#ga_mainContent{ margin-top:-40px;}
-
 		.mainNav{ margin-right:3px}
 			.mainNav li{ display:block; background:url(../images/bg-nav.gif) repeat-x 0 0}
 			.mainNav li:hover, .mainNav li.active{background:url(../images/bg-navHover.gif) repeat-x 0 0}
@@ -33,8 +32,12 @@ a{ text-decoration:none}
 				#bookingResults em{ font-weight:bold; font-size:3.125em; font-style:normal }				
 				#bookingResults .dec{ }
 				#bookingResults small, .ov_Report small{font-size:0.932em; padding-left:15px; display:block}
-				#bookingResults small.inc, .ov_Report small.inc{color:#489823; background:url(../images/ico_inc.gif) no-repeat 0 50%;}
-				#bookingResults small.dec, .ov_Report small.dec{color:#cc3333; background:url(../images/ico_dec.gif) no-repeat 0 50%;}
+				.ov_Report small{font-size:1.25em !important}
+				#bookingResults small, .ov_Report small{ background:url(../images/sprite.gif) no-repeat}
+				#bookingResults small.inc{color:#489823; background-position:0 -20px;}
+				#bookingResults small.dec{color:#cc3333; background-position:0 0}
+				.ov_Report small.inc{color:#489823; background-position:0 -54px}
+				.ov_Report small.dec{color:#cc3333; background-position:0 -33px}
 		.segments{ border:1px solid #e1e1e1; background:#f8f7f5; margin-bottom:16px; padding:2px 0px; width:100%; float:left}
 			.segments li{ float:left; padding:0 8px}
 			.segments label, #userType span{ font-size:0.75em; color:#333; float:left; line-height:25px}
@@ -43,7 +46,7 @@ a{ text-decoration:none}
 			.userType{border:1px solid #d4d4d4; border-radius:2px; float:left; background:url(../images/bg-userType.gif) repeat-x 0 0; overflow:hidden; margin:0 0 0 8px}
 				.userType a{color:#666; font-size:0.75em; padding:5px 16px; float:left; text-decoration:none; border-right:1px solid #cccccc}
 				.userType a.last{ border-right:0}			
-			#go{ border-radius:3px; border:1px solid #d8d8d8; padding:3px; font-size:0.75em; font-weight:bold; color:#666; float:left; margin:2px 0 0; background:url(../images/bg-userType.gif) repeat-x 0 0;}
+			#go, #set{ border-radius:3px; border:1px solid #d8d8d8; padding:3px; font-size:0.75em; font-weight:bold; color:#666; float:left; margin:2px 0 0; background:url(../images/bg-userType.gif) repeat-x 0 0;}
 		#overview{ float:left; width:100%}
 			.hgroup{ overflow:hidden; padding-bottom:12px}
 			#overview h2{ float:left; color:#ccc; font-size:1.250em; font-weight:normal; padding-top:9px}
@@ -58,8 +61,8 @@ a{ text-decoration:none}
 					.ov_Report em{ font-style:normal; color:#333; font-size:1.875em; padding:0 0 3px 0}
 					.ov_Report a.view{color: #3366ff; font-size:0.688em; float:right; text-decoration:none; margin-top:24px}						
 			.ov_graph{ width:99.8%; border:1px solid #ebe8eb; border-radius:3px; float:left;}
-			.flights .ov_graph{ width:466px; height:283px}				
-				.ov_graph h4, #ov_chart li h4{color:#666; font-size:0.875em; padding:3px 0 9px}
+			.ov_graph{ width:466px; height:283px}				
+				.ov_graph h4, #ov_chart li h4{color:#666; font-size:0.875em; padding:12px}
 			#ov_chart{ overflow:hidden; clear:both; position:relative}
 			#ov_chart li{ width:309px; margin:19px 10px 0 0; border:1px solid #ebe8eb; border-radius:3px; float:left}
 			#ov_chart li.last{ margin:19px 0 0 0}

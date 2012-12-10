@@ -15,21 +15,21 @@
   <link rel="stylesheet" type="text/css" href="../css/clean.css" />  
   <script type="text/javascript" src="../js/ga_style.js"></script>
   <script type="text/javascript" src="http://www.google.com/jsapi"></script>
-   <script type="text/javascript" src="../js/validation.js"></script>
+  <script type="text/javascript" src="../js/validation.js"></script>
+  <script type="text/javascript" src="../js/underscore-min.js"></script>
   <script type="text/javascript" src="pico/client.js"></script>
-  <script type="text/javascript">
 
+  <script type="text/javascript">	
+	
   function main(mart){
-         init_params();
          load_overview(mart);
-         init_params();
 		 load_graph(mart);
-		 draw_extra_flights();
-		 //populate_dropdown();
+		 load_extra(mart);
+		 get_list_box(mart);
   }
 
  //call to function
-  pico.load('handler');
+   pico.load('handler');
   pico.main = function(){
           main('Flights');
   }
@@ -38,7 +38,7 @@
   </script>
  </head>
 
- <body class="flights">
+ <body>
 	<div id="ga_outerWrapper">
 		<div class="ga_innerWrapper">
 			<!-- Start Logo -->			
@@ -50,9 +50,7 @@
 				<!-- <form id="search" method="post" action="">
 					<input type="text" name="search" id="searchBox" value=""/>
 				</form> -->
-				<ul class="mainNav">
-					
-				</ul>
+				<ul class="mainNav"></ul>
 			</div>
 			<!-- End Left Side -->
 			<!-- Start Main content -->
@@ -67,8 +65,7 @@
 					</ul> -->
 					<div id="tabContent">
 						<!-- Start:Tab content1 -->
-						<div id="content_1">
-							
+						<div id="content_1">							
 							<!-- Start: Segments -->
 							<div id="segments_1" class="segments">
 								<form id="" method="" action="">
@@ -128,7 +125,7 @@
 												</select>
 											</label>
 										</li>
-										<li><li><a href="" id="go">Go</a></li></li>
+										<li><a href="#" id="go">Go</a></li>
 									</ul>
 								</form>
 							</div>
@@ -141,10 +138,9 @@
 										</select>	
 									</li>
 									<li>										
-										<select id="ByTravelStat_2">
-											<option>Select</option>
-										</select>
+										<select id="ByTravelStat_2" multiple="multiple"></select>
 									</li>
+									<li><a href="#" id="set">Set</a></li>
 								</ul>
 							</div>
 							<!-- start Overview -->
@@ -169,27 +165,9 @@
 								<div class="ov_Report">
 									<ul></ul>
 								</div>
-								<div class="ov_graph">
-									<!--<h4>Activity Volume</h4>-->
-									<div class="figHolder" id="line_chart"></div>
-								</div>
-								<!-- <div id="ov_chart">
-								<div id="pie_chart"></div>
-								<div id="pie_chart1"></div>
-								</div> -->
+								<div class="ov_graph" id="line_chart"></div>								
 								<ul id="ov_chart">
-									<li >
-										<!-- <h4>Total Visitors</h4> -->
-										<div class="figHolder" id="pie_chart"></div>
-									</li>
-									<li>
-										<!-- <h4>Total Conversions</h4> -->
-										<div class="figHolder" id="pie_chart1"></div>
-									</li>
-									<li class="last">
-										<!-- <h4>Conversion Rate</h4> -->
-										<div class="figHolder"></div>
-									</li>
+																		
 								</ul>
 							</div>
 							<!-- End Overview -->
@@ -214,6 +192,22 @@
 			<!-- End Main Content -->
 		</div>
 	</div>
-	
+	<script id="ov_Report_template" type="text/template">	
+		<% _.each(metrics, function (items) { %>
+		<li>
+			<h4><%=items%></h4>
+			<em><img src="../images/ajax-loader.gif"/></em>
+			<small></small>
+		</li>
+		<% }); %> 	
+	</script>
+	<!-- <script id="ov_chart_template" type="text/template">
+		<% _.each(data, function (title, id) { %>
+		<li>
+			<h4><%=title%></h4>
+			<div id=<%=id%>></div>
+		</li>
+		<% }); %> 	
+	</script> -->
  </body>
 </html>

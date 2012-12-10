@@ -35,7 +35,7 @@
                 ],
                 */
                 ['Users',
-                     ['users count','flight tickets','bus tickets','hotel rooms','hotel roomnights','flight transactions','bus transactions','hotel transactions'],
+                     ['users count','flight tickets','bus tickets','hotel rooms','hotel roomnight','flight transactions','bus transactions','hotel transactions'],
                      ['last_login','date_joined'],
 					 ['active','staff','superuser','channel'],
                 ],
@@ -63,51 +63,21 @@ var pieOpt = {
 				'legend':{'position':'none'},
 				'pieSliceText':'label',
 			    'chartArea':{'width':"90%",'height':'90%'},
-				'colors':['#a8c3ea','#3c93cf','#ce1b03','#9cc100','#946db9','#00b9d1','#f49000']
 			 }
 
-	details = {};
-    graphkey = 'Flights';
-	var d = new Date();
-	var today_date = d.getFullYear()+'-'+getFormattedDate((d.getMonth()+1))+'-'+getFormattedDate(d.getDate());	
-	d.setDate(d.getDate()-1);
-    yesterday_date = d.getFullYear()+'-'+getFormattedDate((d.getMonth()+1))+'-'+getFormattedDate(d.getDate());	
-    t1= ['hour',today_date,today_date];
-    t2 = ['hour',yesterday_date,yesterday_date];
-	params = init_params();
-
-
-function getFormattedDate(FDate)
-{
-    if (FDate<10)
-        return "0"+FDate;
-    return FDate;
-}
 
 // Draw chart
 function drawChart(listoflists, charttype, elId,op){
     chart = new google.visualization[charttype](document.getElementById(elId));
     google.visualization.events.addListener(chart, 'ready',function(){});
-    if ((charttype = 'AreaChart') && ($('#metrics').val() == $('#metrics_2').val())){
-            op['series'] = {
-                0:{targetAxisIndex:0},
-                1:{targetAxisIndex:0}
-            }
-    }
-    else{
-            op['series'] = {
-                0:{targetAxisIndex:0}, 
-                1:{targetAxisIndex:1}
-            }
-    }
 	$(elId).html('');
     chart.draw(google.visualization.arrayToDataTable(listoflists), op);
 }
-// google api for charts
+
 google.load('visualization', '1', {packages: ['corechart']});
 var chart = null;
-var color1 = '#0e91c9';
-var color2 ='#e6f4f9';
+var color1 = '#489823';
+var color2 ='#CC3333';
 var options = {
 
 curveType:'function',
@@ -134,7 +104,23 @@ hAxis : {
 interpolateNulls:true,
 };
 
-	
+	details = {};
+    graphkey = 'Flights';
+	var d = new Date();
+	var today_date = d.getFullYear()+'-'+getFormattedDate((d.getMonth()+1))+'-'+getFormattedDate(d.getDate());	
+	d.setDate(d.getDate()-1);
+    yesterday_date = d.getFullYear()+'-'+getFormattedDate((d.getMonth()+1))+'-'+getFormattedDate(d.getDate());	
+    t1= ['hour',today_date,today_date];
+    t2 = ['hour',yesterday_date,yesterday_date];
+	params = init_params();
+
+
+function getFormattedDate(FDate)
+{
+    if (FDate<10)
+        return "0"+FDate;
+    return FDate;
+}
 	
 function init_params(){
     p = {};
@@ -184,20 +170,22 @@ function init_params(){
             if ( p.set2 != null ) p.set2.metric = metric;
             process_overview(p,metric);
         }
-        changeparams(mart);
   }   
 
   function process_overview(params,key){
+        // get t1
         handler.get_details(params).done(function(response){
             details[key] = response; 			
                 // get perc
-                //perc = details[key].results.total[0][2];
-                perc = Math.round((details[key].results.total[0][1] - details[key].results.total[0][2])*100/(details[key].results.total[0][2]));
+                perc = details[key].results.total[0][2];
+                //perc = Math.round((details[key].results.total[0][1] - details[key].results.total[0][2])*100/(details[key].results.total[0][2]));
                 $('.ov_Report li').each(function(){
 					if($(this).find('h4').text() == key)
 					{	
 						$(this).find('em').text(details[key].results.total[0][1]);
 						$(this).find('small').text(perc+'%').addClass('inc');
+						//$(this).append('<em>'+details[key].results.total[0][1]+'</em>');
+						//$(this).append('<small class=\'inc\'>'+perc+'%</small>');					
 					}
 				});
                 if (perc <= 0)
@@ -208,18 +196,28 @@ function init_params(){
   }  
 
  function load_graph(mart){	
-        handler.get_details(params[key],params[key].set1.metric).done(function(response){
-            listoflists = response.results.timestamp;
-            if(!$('#compare').is(':checked')) { // if 'compare' is not checked 
-                tmp = [];
-                for(i=0 ; i < listoflists.length ; i++)
-                    tmp[i] = [listoflists[i][0],listoflists[i][1]];           
-                listoflists = tmp;  //show only one graph,the current one
-                listoflists.unshift([params[key].set1.timerange[0],response.extra]);
-            }   
-            else
-                listoflists.unshift([params[key].set1.timerange[0],'set1','set2']);
-            drawChart(listoflists, 'AreaChart','line_chart',options);
+        key = mart;
+        metric = $('#metrics').val();
+        params[key].set1.metric = metric;
+        handler.get_details(params[key]).done(function(response){
+            details[key] = response;
+                // prepare listoflists from response
+			    listoflists = details[key].results.timestamp;
+                if(!$('#compare').is(':checked'))
+                {
+                    tmp = [];
+                    for(i=0 ; i < listoflists.length ; i++)
+                        {
+                            tmp[i] = [listoflists[i][0],listoflists[i][1]];           
+                        }
+                    listoflists = tmp;
+			        listoflists.unshift([params[key].set1.timerange[0],params[key].set1.metric]);
+                }
+                else
+                {
+			        listoflists.unshift([params[key].set1.timerange[0],'set1','set2']);
+                }
+                 drawChart(listoflists, 'AreaChart','line_chart',options);
         });
   }
 
@@ -318,13 +316,7 @@ function changeparams(mart){
 			    listoflists = details[key].t1.results.timestamp;
 			    // append header to this listoflists
 			    listoflists.unshift([params[key].set1.timerange[0],params[key].set1.metric]);
-				if($('#line_chart').is(':empty'))
-				{
-				$('#line_chart').html('<img src="../images/ajax-loader.gif"/>');
-				}else
-				{
                 drawChart(listoflists, 'LineChart','line_chart',options);
-				}
             }
         });
     });
@@ -343,13 +335,39 @@ function changeparams(mart){
             listoflists = response.results[dim];
 			console.log(response);
 	        listoflists.unshift([dim,params[key].set1.metric,'sometext']);
-			id = 'pie_chart'+response.extra;				
-			$('#ov_chart').append('<li><h4>'+extra[mart][response.extra].metric+' contribution</h4><div id='+id+'></div></li>');
+			id = 'pie_chart'+response.extra;
+			$('#ov_chart').append('<li><div id='+id+'></div></li>');
 			drawChart(listoflists, extra[mart][response.extra].charttype, id, pieOpt);
         });    
     }
 }
-
+ /* 
+  function extra(mart)
+  {
+	p = params[mart];
+    var dim = $('#ByTravelStat_1').val();
+    p.dimensions = [dim];
+    p.summarize_number = 7;
+    // draw tickets pie chart
+    p.set1.metric = 'tickets';
+    handler.get_details(params[key]).done(function(response){
+        listoflists = response.results[dim];
+	    listoflists.unshift([dim,params[key].set1.metric,'sometext']);		
+		drawChart(listoflists, 'PieChart', 'pie_chart',pieOpt);	
+    });
+    // draw Avg ticket value bar chart
+    
+    // draw GMV pie chart
+    p.set1.metric = 'GMV';
+     handler.get_details(params[key]).done(function(response){
+        listoflists = response.results[dim];
+	    listoflists.unshift([dim,params[key].set1.metric,'sometext']);
+		drawChart(listoflists, 'PieChart', 'pie_chart1',pieOpt);
+    });
+    p.set1.metric = $('#metrics').val();	
+    // draw revenue less tickets bar chart
+  }
+*/
 // load data in the list box
 function get_list_box(mart){
     p = init_params()[mart]
