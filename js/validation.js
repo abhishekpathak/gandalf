@@ -65,6 +65,66 @@ var pieOpt = {
 			    'chartArea':{'width':"90%",'height':'90%'},
 				'colors':['#a8c3ea','#3c93cf','#ce1b03','#9cc100','#946db9','#00b9d1','#f49000']
 			 }
+function init_params(){
+    p = {};
+
+    p['Flights'] = {
+            'set1' : {'mart':'flight_paymentdetails','metric':'tickets','timeseries':'bookingtime','timerange':t1},
+            'persistantfilter' : {'typeoftravel':'Domestic'},
+             };
+    p['Flights(intl)'] = {
+            'set1' : {'mart':'flight_paymentdetails','metric':'tickets','timeseries':'bookingtime','timerange':t1},
+            'persistantfilter' : {'typeoftravel':'International'},
+            };
+    p['Bus'] = {
+            'set1' : {'mart':'bus_paymentdetails','metric':'tickets','timeseries':'timeoftransaction','timerange':t1},
+            };
+    p['Hotels'] = {
+            'set1' : {'mart':'hotel_paymentdetails','metric':'Room Nights','timeseries':'bookingtime','timerange':t1},
+             };
+    p['Users'] = {
+            'set1' : {'mart':'users','metric':'users count','timeseries':'last_login','timerange':t1},
+             };
+    p['Cancellations'] = {
+            'set1' : {'mart':'cancellations','metric':'tickets','timeseries':'refund_time','timerange':t1},
+            };
+    p['Traffic'] = {
+            'set1' : {'mart':'traffic','metric':'visitors','timeseries':'visitdate','timerange':t1},
+            }; 
+    return p;
+}  
+extra = {
+        'Flights':          {
+                            'e1': {'metric':'tickets','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            },
+        'Flights(intl)' :   {
+                            'e1': {'metric':'tickets','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            },
+        'Hotels':           {
+                            'e1': {'metric':'Room Nights','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            },
+        'Bus':              {
+                            'e1': {'metric':'tickets','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            },
+        'Users':            {
+                            'e1': {'metric':'flight transactions','charttype':'PieChart'},
+                            'e2': {'metric':'bus transactions','charttype':'PieChart'},
+                            'e3': {'metric':'hotel transactions','charttype':'PieChart'},
+                            },
+        'Cancellations':    {
+                            'e1': {'metric':'tickets','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            },                            
+        'Traffic' :         {
+                            'e1': {'metric':'visitors','charttype':'PieChart'},
+                            'e2': {'metric':'visits','charttype':'PieChart'},
+                            'e3': {'metric':'bounces','charttype':'PieChart'},
+                            },
+        };
 
 	details = {};
     graphkey = 'Flights';
@@ -136,34 +196,7 @@ interpolateNulls:true,
 
 	
 	
-function init_params(){
-    p = {};
 
-    p['Flights'] = {
-            'set1' : {'mart':'flight_paymentdetails','metric':'tickets','timeseries':'bookingtime','timerange':t1},
-            'persistantfilter' : {'typeoftravel':'Domestic'},
-             };
-    p['Flights(intl)'] = {
-            'set1' : {'mart':'flight_paymentdetails','metric':'tickets','timeseries':'bookingtime','timerange':t1},
-            'persistantfilter' : {'typeoftravel':'International'},
-            };
-    p['Bus'] = {
-            'set1' : {'mart':'bus_paymentdetails','metric':'tickets','timeseries':'timeoftransaction','timerange':t1},
-            };
-    p['Hotels'] = {
-            'set1' : {'mart':'hotel_paymentdetails','metric':'Room Nights','timeseries':'bookingtime','timerange':t1},
-             };
-    p['Users'] = {
-            'set1' : {'mart':'users','metric':'users count','timeseries':'last_login','timerange':t1},
-             };
-    p['Cancellations'] = {
-            'set1' : {'mart':'cancellations','metric':'tickets','timeseries':'refund_time','timerange':t1},
-            };
-    p['Traffic'] = {
-            'set1' : {'mart':'traffic','metric':'visitors','timeseries':'visitdate','timerange':t1},
-            }; 
-    return p;
-}   
  
   function draw_top_box(){
     for (var key in params){
@@ -223,38 +256,7 @@ function init_params(){
         });
   }
 
-extra = {
-        'Flights':          {
-                            'e1': {'metric':'tickets','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
-                            },
-        'Flights(intl)' :   {
-                            'e1': {'metric':'tickets','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
-                            },
-        'Hotels':           {
-                            'e1': {'metric':'Room Nights','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
-                            },
-        'Bus':              {
-                            'e1': {'metric':'tickets','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
-                            },
-        'Users':            {
-                            'e1': {'metric':'flight transactions','charttype':'PieChart'},
-                            'e2': {'metric':'bus transactions','charttype':'PieChart'},
-                            'e3': {'metric':'hotel transactions','charttype':'PieChart'},
-                            },
-        'Cancellations':    {
-                            'e1': {'metric':'tickets','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
-                            },                            
-        'Traffic' :         {
-                            'e1': {'metric':'visitors','charttype':'PieChart'},
-                            'e2': {'metric':'visits','charttype':'PieChart'},
-                            'e3': {'metric':'bounces','charttype':'PieChart'},
-                            },
-        };
+
 
 function changeparams(mart){
     key = mart;
@@ -295,7 +297,6 @@ function changeparams(mart){
         params[key].set2.timerange = [frequency,sdate,edate];
     }
 }
-
   
 
   function process(key){
@@ -335,15 +336,15 @@ function changeparams(mart){
     p = params[mart];
     var dim = $('#ByTravelStat_1').val();
     p.dimensions = [dim];
-    p.summarize_number = 7;
-    p.compare = false;
+    p.summarize_number = 7;		
 	$('#ov_chart li').remove();
-    for (var e in extra[mart]) {
+    for (var e in extra[mart]) {		
         p.set1.metric = extra[mart][e].metric;
         handler.get_details(p,e).done(function(response){
             listoflists = response.results[dim];
-	        listoflists.unshift([dim,params[key].set1.metric]);
-			id = 'pie_chart'+response.extra;				
+			console.log(response);
+	        listoflists.unshift([dim,params[key].set1.metric,'sometext']);
+			id = 'pie_chart'+response.extra;
 			$('#ov_chart').append('<li><h4>'+extra[mart][response.extra].metric+' contribution</h4><div id='+id+'></div></li>');
 			drawChart(listoflists, extra[mart][response.extra].charttype, id, pieOpt);
         });    
@@ -370,6 +371,7 @@ function get_list_box(mart){
 				var list = list_box_arr[i];
 				liststr = list.replace(" ","_");
 				$('#ByTravelStat_2').append('<option value='+liststr+'>'+list+'</option>');
+				$('#ByTravelStat_2').attr('multiple', 'multiple').css('background-color','#fff');
 			}
     });
 }

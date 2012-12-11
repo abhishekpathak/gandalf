@@ -202,12 +202,12 @@
 		<% }); %> 	
 	</script>
 	<!-- <script id="ov_chart_template" type="text/template">
-		<% _.each(data, function (title, id) { %>
+		<%_.each(key, function(title, elid){%>
 		<li>
-			<h4><%=title%></h4>
-			<div id=<%=id%>></div>
+			<h4><%=title%> Contribution</h4>
+			<div id=<%=elid%>></div>
 		</li>
-		<% }); %> 	
+		<%})%>
 	</script> -->
  </body>
 </html>
