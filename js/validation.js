@@ -336,13 +336,13 @@ function changeparams(mart){
     var dim = $('#ByTravelStat_1').val();
     p.dimensions = [dim];
     p.summarize_number = 7;
+    p.compare = false;
 	$('#ov_chart li').remove();
     for (var e in extra[mart]) {
         p.set1.metric = extra[mart][e].metric;
         handler.get_details(p,e).done(function(response){
             listoflists = response.results[dim];
-			console.log(response);
-	        listoflists.unshift([dim,params[key].set1.metric,'sometext']);
+	        listoflists.unshift([dim,params[key].set1.metric]);
 			id = 'pie_chart'+response.extra;				
 			$('#ov_chart').append('<li><h4>'+extra[mart][response.extra].metric+' contribution</h4><div id='+id+'></div></li>');
 			drawChart(listoflists, extra[mart][response.extra].charttype, id, pieOpt);

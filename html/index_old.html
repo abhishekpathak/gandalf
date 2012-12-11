@@ -1,0 +1,641 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<link rel="stylesheet" type="text/css" href="css/ui-lightness/jquery-ui-1.8.21.custom.css" media="all" />
+<script type="text/javascript" src="pico/client.js"></script>
+<script type="text/javascript" src="js/google-jsapi.js"></script>
+<script type="text/javascript" src="js/dygraph-combined.js"></script>
+<script type="text/javascript" src="js/jquery-1.7.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui-1.8.21.custom.min.js"></script>
+<!--
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/themes/base/jquery-ui.css" type="text/css" media="all" />
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5/jquery.min.js"></script>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.9/jquery-ui.min.js" type="text/javascript"></script>
+-->
+
+
+<script type = "text/javascript">
+/******************************************************************************/
+function getData(){
+return $.ajax({
+type : "GET",
+cache: false,
+url : "http://localhost:27080/webapp/google/_find?batch_size=10000&criteria=%7B%22date%22%3A%222012-07-04%22%7D",
+contentType : "application/json",
+dataType: "jsonp",    
+});
+}
+
+/******************************************************************************/
+function drawChart(){
+    chart = new google.visualization.LineChart(document.getElementById('chart'));
+    google.visualization.events.addListener(chart, 'ready',function(){});
+    chart.draw(google.visualization.arrayToDataTable(listoflists), options);
+}
+
+function drawDygraph(listoflists){
+        //create data string from listoflists
+        data = "";
+        for (i=0;i<listoflists.length;i++){
+            data += listoflists[i][0]+','+listoflists[i][1]+','+listoflists[i][2]+'\n';
+        }
+        g = new Dygraph(
+                        // specify div
+                        document.getElementById("chart"),
+                        //data
+                        data,
+                        //options
+                        {
+                        stepPlot:false,
+                        colors:['green'],
+                        avoidMinZero:true,
+                        includeZero:true,
+                        drawXGrid:false,
+                        drawGapEdgePoints:true,
+                        drawPoints:true,
+                        pointSize:5,
+                        fillGraph:false,
+                        animatedZooms:true,
+                        showRangeSelector:false,
+                        strokeWidth:3.0,
+                        labelsKMB:true,
+                        }
+                        );
+}
+
+/******************************************************************************/
+
+function addCommas(nStr)
+{
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+}
+
+/******************************************************************************/
+function applyfilter(filterval){
+        viewfilter = filterval;
+        playLoader();
+        var displayMessage = function(message){
+           persistantfilter = message[1];
+           createFilterHtmlnew();
+           viewfilter = "nofilter";
+           render(message[0]);
+        }
+        call_dashboard.call_dashboard(unique_id,mart,metric1,metric2,timeseries1,timeseries2,comparisonFlag,timerange1,timerange2,dimensions,persistantfilter,viewfilter,summarize_number,displayMessage);
+}
+
+/******************************************************************************/
+function createFilterHtml(){
+    persistantfilter_arr = eval(persistantfilter);
+    filterhtml = '<table class="summarytable" width="100%">';
+    filterhtml += '<caption>Filters</caption>'
+    for (i= 0; i < persistantfilter_arr.length; i++){
+    filterval = 'REMOVE,'+persistantfilter_arr[i][0];
+    filterhtml += '<tr><td class="left" onClick="applyfilter(\''+filterval+'\')">'+persistantfilter_arr[i][0]+'</td>';
+    filterhtml += '<td class="right">'+persistantfilter_arr[i][1]+'</td></tr>';
+    }
+    filterhtml += '</table>'
+    var div = document.getElementById('filters');
+    div.innerHTML = '';
+    div.innerHTML = filterhtml; 
+}
+
+/******************************************************************************/
+function createFilterHtmlnew(){
+    persistantfilter_arr = eval(persistantfilter);
+    filterhtml = '<div>'
+    for (i= 0; i < persistantfilter_arr.length; i++){
+    filterval = 'REMOVE,'+persistantfilter_arr[i][0];
+    filterhtml += '<div class = "filter" title = "click on a filter to remove it" style = "float:left;" onClick="applyfilter(\''+filterval+'\')">'+persistantfilter_arr[i][0]+'&nbsp;&nbsp;&nbsp;&nbsp;';
+    filterhtml += persistantfilter_arr[i][1]+'</div>';
+    }
+    filterhtml += '</div>'
+    var div = document.getElementById('filters');
+    div.innerHTML = '';
+    div.innerHTML = filterhtml; 
+}
+
+/******************************************************************************/
+
+function render(message){
+        var c = 0;
+        var div_summaries = document.getElementById("summaries");
+        div_summaries.innerHTML = '';
+        for (i in message){
+                if (comparisonFlag == 1){
+                    listoflists = [[i,metric1,metric2]];
+                }
+                else{
+                    listoflists = [[i,metric1]];
+                }
+                var messagedata = eval("message."+i);
+                listoflists = listoflists.concat(messagedata);
+                // perform operations,if any,on listoflists
+                // display only latest n entries at max
+                
+                var n = 48;
+                if (i == "timestamp"){
+                        console.log(listoflists)
+                
+                        if (listoflists.length > n){
+                                listoflists_title = [listoflists[0]];
+                                listoflists_latest = listoflists.slice(listoflists.length-n);
+                                listoflists = listoflists_title.concat(listoflists_latest);
+                        }
+                
+                        for (i=1;i<listoflists.length;i++){
+                                t = listoflists[i][0];
+                                v1 = listoflists[i][1]
+                                if (comparisonFlag == 1){
+                                        v2 = listoflists[i][2]
+                                        if (v2 == "NA") {
+                                                v2 = null;
+                                        }
+                                        listoflists[i] = [t,v1,v2]
+                                }
+                                else{
+                                        listoflists[i] = [t,v1]
+                                }
+                        }   
+                        document.getElementById('chart').style.display = "";
+                        document.getElementById('loader').style.display = "none";
+                        google.setOnLoadCallback(drawChart());
+                }
+                else if (i == "total") {
+                        totalval_1 = listoflists[1][1];
+                        totaldiv = '<table class = "totaltable">';
+                        totaldiv += '<caption>';
+                        totaldiv += metric1;
+                        totaldiv += '</caption>';
+                        totaldiv += '<tr><td class = "heading">'+d1_sdate+'-'+d1_edate+'( '+timeseries1+' )</td></tr>';
+                        totaldiv += '<tr><td class = "value"><span class="bigtext" style="color:'+color1+';"">'+ addCommas(totalval_1)+'</td></tr>';
+                        if (comparisonFlag == 1){
+                            totalval_2 = listoflists[1][2];
+                            perc = Math.round((listoflists[1][1]-listoflists[1][2])*100.0/listoflists[1][2]);
+                            totaldiv += metric2;
+                            totaldiv += '<tr><td class = "heading">'+d2_sdate+'-'+d2_edate+'( '+timeseries2+' )</td></tr>';
+                            totaldiv += '<tr><td class = "value"><span class="bigtext" style="color:'+color2+';">'+ addCommas(totalval_2)+'<span></td></tr>';
+                            totaldiv += '<tr><td class = "heading">'+'Performance'+'</td></tr>';
+                            if (perc >= 0) perc_html = '<span style = "color:#0083FF;font-size:34px;">&uarr;</span><span style = "color:#0083FF;font-size:28px;">'+perc+'%</span>'
+                            else if (perc < 0) perc_html = '<span style = "color:#FF0000;font-size:34px;">&darr;</span><span style = "color:#FF0000;font-size:28px;">'+(0-perc)+'%</span>'
+                            totaldiv += '<tr><td class = "value">'+perc_html+'</td></tr>';
+                            totaldiv += '</table>'
+                        }
+                        document.getElementById('total').innerHTML = totaldiv;
+                }
+                else{
+                        results = '<table class = "summarytable" width="100%">';
+                        results += '<caption>';
+                        results += listoflists[0][0];
+                        results += '</caption>';
+                        for (var i=1; i<listoflists.length; i=i+1) {                
+                                filterval = listoflists[0][0]+","+listoflists[i][0];
+                                results += '<tr title = "click to apply this filter" onClick="applyfilter(\''+filterval+'\')"><td class = "left">' + listoflists[i][0] + '</td>';  
+                                results += '<td class = "right" style="font-weight:bold;font-size:14px;color:'+color1+';">' + addCommas(listoflists[i][1])+'</td>';
+                                if (comparisonFlag == 1){
+                                        results += '<td class = "right" style="font-weight:bold;font-size:14px;color:'+color2+';">' + addCommas(listoflists[i][2])+'</td>';
+                                        perc = Math.round((listoflists[i][1]-listoflists[i][2])*100.0/listoflists[i][2]);
+                                        if (perc >= 0){
+                                            results += '<td class = "right" style="font-weight:bold;font-size:14px;color:#0083FF;">'+'<span style="font-size:18px;">&uarr;</span><span style = "font-size:10px;">'+ perc + '%</span></td>';
+                                        }
+                                        else if (isNaN(perc)){
+                                            results += '<td class = "right">' + '  ';
+                                        }
+                                        else if (perc < 0){
+                                            results += '<td class = "right" style="font-weight:bold;font-size:14px;color:#FF0000;">' +'<span style ="font-size:18px;font-weight:bold;">&darr;</span><span style = "font-size:10px;">'+ (0-perc) + '%</span></td>';
+                                        }
+                                }
+                                results += '</tr>';  
+                        }       
+                        results += "</table><br><br>";
+                        c++;
+                        div_summaries.innerHTML += '<div class = "summary" id="e'+c+'"></div>';
+                        var div = document.getElementById('e'+c)
+                        div.innerHTML = '';
+                        div.innerHTML = results;
+                }
+        }
+        div_summaries.innerHTML += '<div style = "clear:both;"></div>';
+}
+
+/******************************************************************************/
+
+function populatedropdown(){
+        
+        $a = $('#mart'); // The dropdowns
+        $b1 = $('#metric1');
+        $b2 = $('#metric2');
+        $c1 = $('#timeseries1');
+        $c2 = $('#timeseries2');
+        $d = $('#excelmart');
+        $e = $('#exceltimeseries');
+            
+
+        for(var i = 0; i < data.length; i++) {
+            var first = data[i][0];
+            $a.append($("<option>"). // Add options
+               attr("value",first).
+               data("sel", i).
+               text(first));
+            $d.append($("<option>"). // Add options
+               attr("value",first).
+               data("sel", i).
+               text(first));
+
+        }
+
+
+        $a.change(function() {
+            var index = $(this).children('option:selected').data('sel');
+            var second = data[index][1]; // The second-choice data
+            var third = data[index][2];
+            dimensions = data[index][3];
+
+            $b1.html(''); // Clear existing options in second dropdown
+            $b2.html('');
+            $c1.html('');
+            $c2.html('');
+            
+            for(var j = 0; j < second.length; j++) {
+                $b1.append($("<option>"). // Add options
+                   attr("value",second[j]).
+                   data("sel", j).
+                   text(second[j]));
+
+                $b2.append($("<option>"). // Add options
+                   attr("value",second[j]).
+                   data("sel", j).
+                   text(second[j]));
+            }
+            
+            for(var j = 0; j < third.length; j++) {
+                $c1.append($("<option>"). // Add options
+                   attr("value",third[j]).
+                   data("sel", j).
+                   text(third[j]));
+
+                $c2.append($("<option>"). // Add options
+                   attr("value",third[j]).
+                   data("sel", j).
+                   text(third[j]));
+            }
+
+            $(function() {
+            $( "#date1_sdate" ).attr("value",d1_sdate);
+            $( "#date1_edate" ).attr("value",d1_edate);
+            $( "#date1_sdate" ).datepicker();
+            $( "#date1_edate" ).datepicker();
+            $( "#date2_sdate" ).attr("value",d2_sdate);
+            $( "#date2_edate" ).attr("value",d2_edate);
+            $( "#date2_sdate" ).datepicker();
+            $( "#date2_edate" ).datepicker();
+            });
+            
+        }).change(); // Trigger once to add options at load of first choice
+
+
+        $d.change(function() {
+            var index = $(this).children('option:selected').data('sel');
+            var second = data[index][1]; // The second-choice data
+            var third = data[index][2];
+            dimensions = data[index][3];
+
+            $e.html(''); // Clear existing options in second dropdown
+            
+            
+            for(var j = 0; j < third.length; j++) {
+                $e.append($("<option>"). // Add options
+                   attr("value",third[j]).
+                   data("sel", j).
+                   text(third[j]));
+            }
+            $(function() {
+            $( "#excel_sdate" ).attr("value",d2_sdate);
+            $( "#excel_sdate" ).datepicker();
+            $( "#excel_edate" ).attr("value",d2_sdate);
+            $( "#excel_edate" ).datepicker();
+            });
+            
+        }).change(); // Trigger once to add options at load of first choice
+
+}
+
+/******************************************************************************/
+function formatDate(dateString){
+    tmp = dateString.split("/");
+    return tmp[2] + '-'+ tmp[1] +'-' + tmp[0];
+}
+
+function playLoader(){
+        document.getElementById('chart').style.display = "none";
+        document.getElementById('loader').style.display = "inline";
+        document.getElementById('summaries').innerHTML = '<div id = "loader"></div>';
+        document.getElementById('total').innerHTML = '<div id = "loader"></div>';
+}
+/******************************************************************************/
+function changeParams(){
+        playLoader();
+        mart_old = mart;
+        mart = document.dropdown.mart.value;
+        if (mart_old != mart){
+            // all extra logic when mart changes goes here
+            persistantfilter = "[]" // Reset persistantfilter
+            document.getElementById("filters").innerHTML = '';
+        }
+        metric1 = document.dropdown.metric1.value;
+        metric2 = document.dropdown.metric2.value;
+        timeseries1 = document.dropdown.timeseries1.value;
+        timeseries2 = document.dropdown.timeseries2.value;
+        summarize_number = document.dropdown.summarize_number.value;
+        timerange_frequency = document.dropdown.timerange_frequency.value;
+        d1_sdate = document.dropdown.date1_sdate.value;
+        d1_edate = document.dropdown.date1_edate.value;
+        d2_sdate = document.dropdown.date2_sdate.value;
+        d2_edate = document.dropdown.date2_edate.value;
+        timerange1 = [timerange_frequency,d1_sdate,d1_edate]
+        timerange2 = [timerange_frequency,d2_sdate,d2_edate]
+        for(var i = 0; i < data.length; i++) {
+            if (data[i][0] == mart){ 
+                    dimensions = data[i][3];
+                }
+        }
+        var displayMessage = function(message){
+            render(message[0]);
+            viewfilter = "nofilter"
+        }
+        call_dashboard.call_dashboard(unique_id,mart,metric1,metric2,timeseries1,timeseries2,comparisonFlag,timerange1,timerange2,dimensions,persistantfilter,viewfilter,summarize_number,displayMessage);
+}
+
+/******************************************************************************/
+$.datepicker.setDefaults({
+    dateFormat:'yy-mm-dd',
+});
+var data = [ // The data
+            [
+             'flight_paymentdetails',
+             ['tickets','GMV','Gross Margin','Promocode','Commission'],
+             ['bookingtime','traveltime'],
+             ['airline','sector','city','typeoftravel','roundtrip','discountedroundtrip','promocodename','paymentgateway','promocodetype','flavor'],
+            ],
+            [
+            'bus_paymentdetails',
+             ['tickets', 'GMV','Gross Margin','Promocode'],
+             ['timeoftransaction'],        
+             ['source','destination','status'],
+            ],
+            [
+            'hotel_paymentdetails',
+             ['Room Nights','Rooms','GMV','Promocode','transactions','refundamount'],
+             ['bookingtime','checkin','checkout'],
+             ['hotelname','hotelcity','customercity','status','promocodename','category'],
+            ],
+            [
+            'users',
+             ['users count','flight tickets','bus tickets','hotel rooms','hotel roomnight','flight transactions','bus transactions','hotel transactions'],
+             ['last_login','date_joined'],
+             ['active','staff','superuser','channel'],
+            ],
+            [
+             'cancellations',
+             ['tickets','Airline C Charges','Ibibo C Charges','Refund Amount','GMV','Gross Margin','Promocode','transactions','Commission'],
+             ['refund_time','bookingtime','traveltime'],
+             ['airline','source','destination','sector','city','status','typeoftravel','roundtrip','discountedroundtrip','promocodename','amadeusvendor','paymentgateway','promocodetype','flavor'],
+            ],
+            /*
+            [
+            'flightsearch',
+            ['searches'],
+            ['loggingtime'],
+            ['vendor','carrier','source','destination','server'],
+            ],
+            */
+            [
+            'traffic',
+            ['visitors','visits','bounces','all goal completions','goal 1 completions','goal 2 completions','goal 4 completions','goal 7 completions'],
+            ['visitdate'],
+            ['category','medium','source','visitortype'],
+            ],
+        ];
+//var unique_id = "picotest";
+var unique_id = Math.random().toString(36).substring(7);
+var mart = "flight_paymentdetails";
+var metric1 = "tickets";
+var metric2 = metric1;
+var timeseries1 = "bookingtime";
+var timeseries2 = timeseries1;
+var d1_sdate = $.datepicker.formatDate("yy-mm-dd",new Date());
+var comparisonFlag = 0;
+var d1_edate = d1_sdate;
+var d2_sdate = d1_sdate;
+var d2_edate = d1_edate;
+var timerange_frequency = "hour"
+var timerange1 = [timerange_frequency,d1_sdate,d1_edate];
+var timerange2 = [timerange_frequency,d2_sdate,d2_edate];
+var dimensions = [] 
+var viewfilter = "nofilter";
+var persistantfilter = "[]"
+var refresh = 1200;
+var listoflists = [[]];
+var totalval = 0;
+var summarize_number = 10;
+color1 = '#084B8A';
+color2 = '#B20000';
+var options = {
+        curveType:'function',
+        animation:{
+        duration: 1000,
+        easing: 'out',
+        },
+        colors :[color1,color2],
+        hAxis:{
+        },
+        lineWidth:2,
+        pointSize:2,
+        chartArea:{left:'auto',top:25,width:"90%",height:'80%'},
+        legend : {
+            position:'top',
+        },
+        hAxis : {
+            minTextSpacing:50, 
+            slantedText:false,
+        },
+        interpolateNulls:true,
+};
+var chart = null;
+var filterno = 1;
+google.load('visualization', '1', {packages: ['corechart']});
+pico.load('call_dashboard');
+pico.main = function() {
+        populatedropdown();
+                var displayMessage = function(message){
+                    render(message[0]);
+                    persistantfilter = message[1];
+                }
+                call_dashboard.call_dashboard(unique_id,mart,metric1,metric2,timeseries1,timeseries2,comparisonFlag,timerange1,timerange2,dimensions,persistantfilter,viewfilter,summarize_number,displayMessage);
+createFilter();
+
+        setInterval(function(){
+        var displayMessage = function(message){
+            render(message[0]);
+            persistantfilter = message[1];
+        }
+        call_dashboard.call_dashboard(unique_id,mart,metric1,metric2,timeseries1,timeseries2,comparisonFlag,timerange1,timerange2,dimensions,persistantfilter,viewfilter,summarize_number,displayMessage);
+        }        
+        ,refresh*1000);
+}
+
+/******************************************************************************/
+function createFilter(){
+    d = document.getElementById('excelfilters');
+    dimensions = data[0][3];
+    results = '<p class = "text"><select style = "float:left;height:24px;width:35%;" id=filter'+filterno+'name value = dimensions>' ;
+    results += '<option value = "">select...</option>';
+    for(i=0;i<dimensions.length;i++){
+        results += '<option value = "'+dimensions[i]+'"> '+dimensions[i]+'</option>';
+    }
+    results += '</select>';
+    results += '<input type="text" class = "dateinput" id=filter'+filterno+'value></p>';
+    $('#excelfilters').append(results);
+    filterno++;
+}
+/******************************************************************************/
+function submitExcel(){
+    document.getElementById('status').innerHTML = "please wait...";
+    excelmart = document.excelinput.excelmart.value;
+    exceltimeseries = document.excelinput.exceltimeseries.value;
+    excel_sdate = document.excelinput.excel_sdate.value;
+    excel_edate = document.excelinput.excel_edate.value;
+    excel_filters = {};
+    for (i=1;i < filterno;i++){
+    filtername = eval('document.excelinput.filter'+i+'name.value');
+    filtervalue = eval('document.excelinput.filter'+i+'value.value');
+    if (filtername != ""){
+        excel_filters[filtername] = filtervalue;
+    }
+    }
+    var excel_uid = document.excelinput.excel_uid.value;
+    if (excel_uid == ''){ excel_uid = "untitled";}
+
+    var displayMessage = function(message){
+    status = message[0]
+    if (status == "success"){
+            csv_file = '/'+message[1];
+            window.location.replace(csv_file);
+            document.getElementById('status').innerHTML = "Download ready.";
+    }
+    else{
+            document.getElementById('status').innerHTML = "Error while processing.Please check the form for any typos.<br>Error debug:" + message[1];
+    } 
+    }
+    call_dashboard.call_excel(excel_uid, excelmart, exceltimeseries, excel_filters, excel_sdate, excel_edate, displayMessage);
+
+}
+
+
+
+/******************************************************************************/
+function enableSecondDate(){
+    checkbox = document.getElementById('checkbox');
+    if (checkbox.checked){
+        comparisonFlag = 1;
+        document.getElementById('secondDate').style.display="block";
+    }
+    else{
+        comparisonFlag = 0;
+        document.getElementById('secondDate').style.display="none";
+    }
+}
+
+
+
+/******************************************************************************/
+
+</script>
+
+
+  </head>
+  <body>
+    <div id = "left-content">
+        <div id = "title" class="content" style="padding:10px 10px;">
+            <h1 style="text-align:center; color:#666; margin:1px; font-size:25px; font-family:Arial, Helvetica"> <b style="color:#f26722; font-size:45px;margin-bottom:10px;">go</b><strong style="color:#2d67b2; font-size:45px;margin-bottom:10px;">ibibo</strong> Dashboard</h1>
+        </div>
+        <div id = "sidebar"> 
+                <div id = "dropdown" class = "content">
+                    <form name = "dropdown">
+                    <p class = "text"> Mart : <select id=mart value = mart></select> </p>
+                    <p class = "text"> Metric : <select id=metric1 value = metric1></select> </p>
+                    <p class = "text"> Timeseries : <select id=timeseries1 value = timeseries></select> </p>
+                    <p class = "text"> Show top : 
+                    <select id=summarize_number value = summarize_number>
+                            <option value = "10">10 items </option>
+                            <option value = "20">20 items </option>
+                            <option value = "50">50 items </option>
+                            <option value = "100">100 items </option>
+                    </select> </p>
+                    <p class = "text"> Start Date : <input class = "dateinput" type="text" id=date1_sdate></p>
+                    <p class = "text"> End Date : <input class = "dateinput" type="text" id=date1_edate></p>
+                    <p class = "text"> Compare with another range <input type="checkbox" id = "checkbox" style = "float:right" name="comparison" onClick='enableSecondDate();'></p>
+                    <div id = "secondDate" style = "display:none">
+                            <p class = "text"> Metric : <select id=metric2 value = metric2></select> </p>
+                            <p class = "text"> Timeseries : <select id=timeseries2 value = timeseries2></select> </p>
+                            <p class = "text"> Start Date : <input type="text" class = "dateinput" id=date2_sdate></p>
+                            <p class = "text"> End Date : <input type="text" class = "dateinput" id=date2_edate></p>
+                    </div>
+                    <p class = "text"> Frequency : 
+                    <select id=timerange_frequency value = timerange_frequency>
+                            <option value = "hour"> hour of the day </option>
+                            <option value = "dayofweek"> day of the week </option>
+                            <option value = "date"> date </option>
+                            <option value = "month"> month </option>
+                    </select></p>
+                    <input type='button' class = "submitbutton" onclick='changeParams();' value='Go!'></input>
+                    </form>
+                </div>
+                <div id = "total" class="content"></div>
+                
+        </div>
+        <div id = "excel" class = "content">
+                    <h2> Download Excel Report </h2>
+                    <form name = "excelinput">
+                            <p class = "text"> Mart : <select id=excelmart value = excelmart>
+                            </select> </p>
+                            <p class = "text"> Timeseries : <select id=exceltimeseries value = exceltimeseries>
+                                <option value = "bookingdate">bookingdate </option>
+                                <option value = "traveldate">traveldate </option>
+                            </select> </p>
+                            <p class = "text"> Start Date : <input class = "dateinput" type="text" id=excel_sdate></p>
+                            <p class = "text"> End Date : <input class = "dateinput" type="text" id=excel_edate></p>
+                            <div id = "excelfilters" class = "content"></div>
+                            <a onclick='createFilter()'style = "float:left;padding:10px;cursor:pointer;width:100%">[+]</a> 
+                            <p class = "text" > report name: <input class = "dateinput" type="text" id=excel_uid></p>
+                            <input type='button' style = "margin-top : 50px;"class = "submitbutton" onclick='submitExcel();' value='Submit'></input>
+                    </form>
+                    <div id = "status" class = "content" style = "float:left;width:60%;margin-top:60px;font-size:12px;font-family:Arial,Helvetica;color:red"></div> 
+        </div>
+
+    </div>
+
+    <div id = "mainbar" class = "content">
+                <div id="filters" class = "content" style="padding:0px 0px;">
+                </div>
+
+                <div id = "chartwrapper">
+                        <div id = "chart" style = "display:none;"></div>
+                        <div id = "loader"></div>
+                </div>
+
+        <div id = "summaries" class="content"></div>
+    </div>
+    <div style = "clear:both;"></div>
+  </body>
+</html>

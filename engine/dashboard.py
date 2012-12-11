@@ -27,7 +27,6 @@ class Dashboard(object):
         self.viewfilter = self.gettimefilter()
         #self.viewfilter = dict(self.viewfilter,**(self.metric.get('extra filters',dict())))
         self.viewfilter = dict(self.viewfilter,**persistant_filters)
-        print self.viewfilter
         self.dimensions = map(str,dimensions)
         self.summarize_number = summarize_number
 

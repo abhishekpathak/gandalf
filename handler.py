@@ -15,6 +15,7 @@ def get_details(params,extra=None):
     persistantfilter = params.get('persistantfilter',{})
     viewfilter = params.get('viewfilter',{})
     summarize_number = params.get('summarize_number',1)
+    compare = params.get('compare',True)
 
     if set2 == {}:
         set2 = copy.deepcopy(set1)
@@ -29,7 +30,10 @@ def get_details(params,extra=None):
     set2['timerange'] = map(lambda item:item.replace('-',''),set2['timerange'])
 
     dictionary1,viewfilter1 = call_engine(set1['mart'],set1['metric'],set1['timeseries'],set1['timerange'],dimensions,persistantfilter,viewfilter,None)
-    dictionary2,viewfilter2 = call_engine(set2['mart'],set2['metric'],set2['timeseries'],set2['timerange'],dimensions,persistantfilter,viewfilter,None)
+    if compare : 
+        dictionary2,viewfilter2 = call_engine(set2['mart'],set2['metric'],set2['timeseries'],set2['timerange'],dimensions,persistantfilter,viewfilter,None)
+    else:
+        dictionary2 = None
     dictionary = prepare_to_render(dictionary1,dictionary2,set1['timerange'],summarize_number)
 
     # merge persistantfilter_dict and viewfilter_dict.But before that,remove the _id. tag that we get from the raw viewfilter.

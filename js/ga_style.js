@@ -91,7 +91,8 @@ initDoc : function(){
 		$('.mainNav li').removeClass('active');
 		$(this).addClass('active');
 		ga_analytics.getSelectBoxData();		
-		ga_analytics.loadchangeparams();
+		//ga_analytics.loadchangeparams();
+	    var mart = $('.mainNav li.active a').text();
 		main(mart);
 	});
 	$('#ByTravelStat_1').change(function(){			

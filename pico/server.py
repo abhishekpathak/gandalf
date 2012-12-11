@@ -316,14 +316,13 @@ def load_module(module_name):
     return m
 
 def file_handler(path):
-    print "FILE PATH :" +path
     response = Response()
     file_path = ''
     for (url, directory) in STATIC_URL_MAP:
         m = re.match(url, path)
         if m:
             file_path = directory + ''.join(m.groups())
-
+    print 'filepath -------------------------'+file_path
     # if the path does not point to a valid file, try default file 
     file_exists = os.path.isfile(file_path)
     if not file_exists:
@@ -449,7 +448,7 @@ url_handlers = {
 STATIC_URL_MAP = [
 ('^/(.*)$', './'),
 ]
-DEFAULT = settings.ROOT_DIR+"html/home.html"
+DEFAULT = settings.ROOT_DIR+"html/index.html"
 RELOAD = True
 STREAMING = False
 SILENT = False
