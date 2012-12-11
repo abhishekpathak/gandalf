@@ -31,7 +31,10 @@
  //call to function
   pico.load('handler');
   pico.main = function(){
-          main('Flights');
+          var mart = 'Flights';
+          params = init_params();
+          ga_analytics.initDoc(mart);
+          main(mart);
   }
 	
  
@@ -42,7 +45,7 @@
 	<div id="ga_outerWrapper">
 		<div class="ga_innerWrapper">
 			<!-- Start Logo -->			
-			<a href="home.html" id="ga_logo"><img src="../images/ga_logo.png" alt="goibibo analytics"/></a>			
+			<a href="html/index.html" id="ga_logo"><img src="../images/ga_logo.png" alt="goibibo analytics"/></a>			
 			<!-- End Logo -->
 			<div class="clearfix"></div>
 			<!-- Left Side -->
@@ -58,10 +61,10 @@
 				<!-- Start tabs -->
 				<div id="tabWrapper">
 					 <ul class="tabs">
-						<li><a href="#content_1">Traffic Analysis</a></li>
-						<li><a href="#content_2">CRM Performance</a></li>
-						<li><a href="#content_3">Financial Performance</a></li>
-						<li><a href="#content_4">User Analysis</a></li>						
+						<li><a href="traffic.html">Traffic Analysis</a></li>
+						<li><a href="#">CRM Performance</a></li>
+						<li><a href="financial.html">Financial Performance</a></li>
+						<li><a href="#">User Analysis</a></li>						
 					</ul> 
 					<div id="tabContent">
 						<!-- Start:Tab content1 -->

@@ -64,7 +64,7 @@ a{ text-decoration:none}
 			.ov_graph{ width:466px; height:283px}				
 				.ov_graph h4, #ov_chart li h4{color:#666; font-size:0.875em; padding:12px}
 			#ov_chart{ overflow:hidden; clear:both; position:relative}
-			#ov_chart li{ width:309px; margin:19px 10px 0 0; border:1px solid #ebe8eb; border-radius:3px; float:left}
+			#ov_chart li{ width:300px; margin:19px 10px 0 0; border:1px solid #ebe8eb; border-radius:3px; float:left}
 			#ov_chart li.last{ margin:19px 0 0 0}
 			.figHolder{text-align:center}
 

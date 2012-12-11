@@ -1,12 +1,12 @@
 ga_analytics  = {
 
 //load mart
-loadMart : function()
+loadMart : function(mart)
 {
 	for(var i = 0; i < template.length; i++)
 	$('.mainNav').append('<li><a href="#">'+template[i][0]+'</a></li>');
 	$('.mainNav li:first').addClass('active');
-	this.getSelectBoxData();	
+	this.getSelectBoxData(mart);	
 },
 
 loadchangeparams : function()
@@ -16,10 +16,10 @@ loadchangeparams : function()
 	var mart = $('.mainNav li.active a').text();
 	changeparams(mart);
 },
-getSelectBoxData : function()
+getSelectBoxData : function(mart)
 {			
-	var currentVal = $('.mainNav li.active a').text();
-		//main(currentVal);
+	//var currentVal = $('.mainNav li.active a').text();
+    var currentVal = mart;
 		
 		for(var i = 0; i < template.length; i++) {			
             if (template[i][0] == currentVal){ 
@@ -65,9 +65,9 @@ getSelectBoxData : function()
 			});
 		}
 },
-initDoc : function(){
-	this.getSelectBoxData();
-	this.loadMart();
+initDoc : function(mart){
+	this.getSelectBoxData(mart);
+	this.loadMart(mart);
 	var mart = $('.mainNav li.active a').text();
 	$('#compare').attr('checked',false);
 	$('#segments_2').hide();
@@ -200,4 +200,4 @@ initDoc : function(){
 }
 	
 }
-$(document).ready(function () { ga_analytics.initDoc(); });
+//$(document).ready(function () { ga_analytics.initDoc(); });
