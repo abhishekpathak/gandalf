@@ -94,8 +94,9 @@ initDoc : function(){
 		ga_analytics.loadchangeparams();
 		main(mart);
 	});
-	$('#ByTravelStat_1').change(function(){			
-		get_list_box(mart);
+	$('#ByTravelStat_1').change(function(){	
+		$('#ByTravelStat_2').removeAttr('multiple').css('background-color','#efefef');
+		get_list_box(mart);		
 		load_extra(mart);
 	});	
 	$('#set').click(function(){				
