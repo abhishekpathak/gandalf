@@ -1,6 +1,12 @@
 
     var template =
     [
+                ["financial_all",
+                    ['tickets','GMV','Gross Margin','Promocode','Commission'],
+                    ['bookingtime','traveltime'],
+					['airline','sector','city','typeoftravel','roundtrip','discountedroundtrip','promocodename','paymentgateway','promocodetype','flavor'],
+
+                ],
                 ["Flights",
                     ['tickets','GMV','Gross Margin','Promocode','Commission'],
                     ['bookingtime','traveltime'],
@@ -17,23 +23,11 @@
                     ['bookingtime','checkin','checkout'],
 					['hotelname','hotelcity','customercity','status','promocodename','category'],
                 ],
-                /*
-                ["Holidays",
-                    ['users count','flight tickets','bus tickets','hotel rooms','hotel roomnight','flight transactions','bus transactions','hotel transactions'],
-                    ['last_login','date_joined'],
-                ],
-                */
                 ["Bus",
                     ['tickets', 'GMV','Gross Margin','Promocode'],
                     ['timeoftransaction'],
 					['source','destination','status'],
                 ],
-                /*
-                ["Taxi",
-                     ['visitors','visits','bounces','all goal completions','goal 1 completions','goal 2 completions','goal 4 completions','goal 7 completions'],
-                     ['visitdate'],
-                ],
-                */
                 ['Users',
                      ['users count','flight tickets','bus tickets','hotel rooms','hotel roomnights','flight transactions','bus transactions','hotel transactions'],
                      ['last_login','date_joined'],
