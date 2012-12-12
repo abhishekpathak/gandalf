@@ -18,7 +18,6 @@
   <script type="text/javascript" src="../js/validation.js"></script>
   <script type="text/javascript" src="../js/underscore-min.js"></script>
   <script type="text/javascript" src="../pico/client.js"></script>
-
   <script type="text/javascript">	
 	
   function main(mart){
@@ -42,7 +41,7 @@
 	<div id="ga_outerWrapper">
 		<div class="ga_innerWrapper">
 			<!-- Start Logo -->			
-			<a href="home.html" id="ga_logo"><img src="../images/ga_logo.png" alt="goibibo analytics"/></a>			
+			<a href="/html/index.html" id="ga_logo"><img src="../images/ga_logo.png" alt="goibibo analytics"/></a>			
 			<!-- End Logo -->
 			<div class="clearfix"></div>
 			<!-- Left Side -->
@@ -61,139 +60,111 @@
 			<!-- End Left Side -->
 			<!-- Start Main content -->
 			<div id="ga_mainContent">
-				<!-- Start tabs -->
+				<!-- Start tabWrapper -->
 				<div id="tabWrapper">
 					 <ul class="tabs">
-						<li><a href="#content_1">Traffic Analysis</a></li>
-						<li><a href="#content_2">CRM Performance</a></li>
-						<li><a href="#content_3">Financial Performance</a></li>
-						<li><a href="#content_4">User Analysis</a></li>						
+						<li><a href="/html/traffic.html">Traffic Analysis</a></li>
+						<li><a href="/html/crm.html" class="selected">CRM Performance</a></li>
+						<li><a href="/html/financial.html">Financial Performance</a></li>
+						<li><a href="/html/user.html">User Analysis</a></li>						
 					</ul> 
-					<div id="tabContent">
-						<!-- Start:Tab content1 -->
-						<div id="content_1">							
-							<!-- Start: Segments -->
-							<div id="segments_1" class="segments">
-								<form id="" method="" action="">
-									<ul>
-										<li>
-											<label>Metrics
-												<select id="metrics">
-													<option>Select</option>
-												</select>	
-											</label>
-										</li>
-										<li>
-											<div id="date-range">
-											  <div class="date-range-field" id="date-range-field_1">
-												<span></span>
-												<a href="#">&#9660;</a>
-											  </div>
-											  <div id="datepicker-calendar" class="datepicker-calendar"></div>
-											</div>
-										</li>
-										<li>
-											<label>Time series
-												<select id="timeSeries">
-													<option>Select</option>
-												</select>
-											</label>
-										</li>
-										<li><label class="compare"><input type="checkbox" name="comparison" id="compare">Compare</label></li>
-									</ul>
-								</form>
-							</div>
-							<!-- End: segments -->
-							<!-- Strat Segments 2 -->
-							<div id="segments_2" class="segments">
-								<form id="" method="" action="">
-									<ul>
-										<li>
-											<label>Metrics
-												<select id="metrics_2">
-													<option>Select</option>
-												</select>	
-											</label>
-										</li>
-										<li>
-											<div id="date-range_2">
-											  <div class="date-range-field" id="date-range-field_2">
-												<span></span>
-												<a href="#">&#9660;</a>
-											  </div>
-											  <div id="datepicker-calendar_2" class="datepicker-calendar"></div>
-											</div>
-										</li>
-										<li>
-											<label>Time series
-												<select id="timeSeries_2">
-													<option>Select</option>
-												</select>
-											</label>
-										</li>
-										<li><a href="#" id="go">Go</a></li>
-									</ul>
-								</form>
-							</div>
-							<!-- End Segments2 -->
-							<div class="segments">
+					<div id="tabContent">						
+						<!-- Start: Segments -->
+						<div id="segments_1" class="segments">
+							<form id="" method="" action="">
 								<ul>
-									<li>										
-										<select id="ByTravelStat_1">
-											<option>Select</option>
-										</select>	
+									<li>
+										<label>Metrics
+											<select id="metrics"></select>	
+										</label>
 									</li>
-									<li>										
-										<select id="ByTravelStat_2" multiple="multiple"></select>
-									</li>
-									<li><a href="#" id="set">Set</a></li>
-								</ul>
-							</div>
-							<!-- start Overview -->
-							<div id="overview">
-								<div class="hgroup">
-									<h2>Overview</h2>									
-									<div id="ov_TimeSeries">
-										<a href="#" class="active" id="hour">Hourly</a>
-										<a href="#" id="date">Day</a>
-										<a href="#" id="dayofweek">Week</a>
-										<a href="#" id="month" class="last">Month</a>
-									</div>
-									<div id="userType">
-										<span>User Type</span>
-										<div class="userType">
-											<a href="#">All</a>
-											<a href="#">Returning</a>
-											<a href="#" class="last">New</a>
+									<li>
+										<div id="date-range">
+										  <div class="date-range-field" id="date-range-field_1">
+											<span></span>
+											<a href="#">&#9660;</a>
+										  </div>
+										  <div id="datepicker-calendar" class="datepicker-calendar"></div>
 										</div>
+									</li>
+									<li>
+										<label>Time series
+											<select id="timeSeries"></select>
+										</label>
+									</li>
+									<li><label class="compare"><input type="checkbox" name="comparison" id="compare">Compare</label></li>
+								</ul>
+							</form>
+						</div>
+						<!-- End: segments -->
+						<!-- Strat Segments 2 -->
+						<div id="segments_2" class="segments">
+							<form id="" method="" action="">
+								<ul>
+									<li>
+										<label>Metrics
+											<select id="metrics_2"></select>	
+										</label>
+									</li>
+									<li>
+										<div id="date-range_2">
+										  <div class="date-range-field" id="date-range-field_2">
+											<span></span>
+											<a href="#">&#9660;</a>
+										  </div>
+										  <div id="datepicker-calendar_2" class="datepicker-calendar"></div>
+										</div>
+									</li>
+									<li>
+										<label>Time series
+											<select id="timeSeries_2"></select>
+										</label>
+									</li>
+									<li><a href="#" id="go">Go</a></li>
+								</ul>
+							</form>
+						</div>
+						<!-- End Segments2 -->
+						<div class="segments">
+							<ul>
+								<li>										
+									<select id="ByTravelStat_1"></select>	
+								</li>
+								<li>										
+									<select id="ByTravelStat_2" multiple="multiple"></select>
+								</li>
+								<li><a href="#" id="set">Set</a></li>
+							</ul>
+						</div>
+						<!-- start Overview -->
+						<div id="overview">
+							<div class="hgroup">
+								<h2>Overview</h2>									
+								<div id="ov_TimeSeries">
+									<a href="#" class="active" id="hour">Hourly</a>
+									<a href="#" id="date">Day</a>
+									<a href="#" id="dayofweek">Week</a>
+									<a href="#" id="month" class="last">Month</a>
+								</div>
+								<div id="userType">
+									<span>User Type</span>
+									<div class="userType">
+										<a href="#">All</a>
+										<a href="#">Returning</a>
+										<a href="#" class="last">New</a>
 									</div>
 								</div>
-								<div class="ov_Report">
-									<ul></ul>
-								</div>
-								<div class="ov_graph" id="line_chart"></div>								
-								<ul id="ov_chart">
-																		
-								</ul>
 							</div>
-							<!-- End Overview -->
+							<div class="ov_Report">
+								<ul></ul>
+							</div>
+							<div class="ov_graph" id="line_chart"></div>								
+							<ul id="ov_chart"></ul>
 						</div>
-						<!-- End: Tab content1 -->
-						<!-- Start: Tab content2 -->
-						<div id="content_2"> Content2</div>
-						<!-- End: Tab content2 -->
-						<!-- Start: Tab content2 -->
-						<div id="content_3"> Content3</div>
-						<!-- End: Tab content2 -->
-						<!-- Start: Tab content2 -->
-						<div id="content_4"> Content4</div>
-						<!-- End: Tab content2 -->
-						<!-- Start: Tab content2 -->
-						<div id="content_5"> Content5</div>
-						<!-- End: Tab content2 -->
-						</div>					
+						<!-- End Overview -->						
+					</div>					
 				</div>
-				<!-- End tabs -->
+				<!-- End tabWrapper -->
 			</div>
 			<!-- End Main Content -->
 		</div>
@@ -208,12 +179,12 @@
 		<% }); %> 	
 	</script>
 	<!-- <script id="ov_chart_template" type="text/template">
-		<% _.each(data, function (title, id) { %>
+		<%_.each(key, function(title, elid){%>
 		<li>
-			<h4><%=title%></h4>
-			<div id=<%=id%>></div>
+			<h4><%=title%> Contribution</h4>
+			<div id=<%=elid%>></div>
 		</li>
-		<% }); %> 	
+		<%})%>
 	</script> -->
  </body>
 </html>

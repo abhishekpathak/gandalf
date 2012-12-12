@@ -41,7 +41,7 @@
 	<div id="ga_outerWrapper">
 		<div class="ga_innerWrapper">
 			<!-- Start Logo -->			
-			<a href="home.html" id="ga_logo"><img src="../images/ga_logo.png" alt="goibibo analytics"/></a>			
+			<a href="/html/index.html" id="ga_logo"><img src="../images/ga_logo.png" alt="goibibo analytics"/></a>			
 			<!-- End Logo -->
 			<div class="clearfix"></div>
 			<!-- Left Side -->
@@ -65,7 +65,7 @@
 					 <ul class="tabs">
 						<li><a href="/html/traffic.html">Traffic Analysis</a></li>
 						<li><a href="/html/crm.html">CRM Performance</a></li>
-						<li><a href="/html/financial.html">Financial Performance</a></li>
+						<li><a href="/html/financial.html" class="selected">Financial Performance</a></li>
 						<li><a href="/html/user.html">User Analysis</a></li>						
 					</ul> 
 					<div id="tabContent">						
@@ -75,9 +75,7 @@
 								<ul>
 									<li>
 										<label>Metrics
-											<select id="metrics">
-												<option>Select</option>
-											</select>	
+											<select id="metrics"></select>	
 										</label>
 									</li>
 									<li>
@@ -91,9 +89,7 @@
 									</li>
 									<li>
 										<label>Time series
-											<select id="timeSeries">
-												<option>Select</option>
-											</select>
+											<select id="timeSeries"></select>
 										</label>
 									</li>
 									<li><label class="compare"><input type="checkbox" name="comparison" id="compare">Compare</label></li>
@@ -107,9 +103,7 @@
 								<ul>
 									<li>
 										<label>Metrics
-											<select id="metrics_2">
-												<option>Select</option>
-											</select>	
+											<select id="metrics_2"></select>	
 										</label>
 									</li>
 									<li>
@@ -123,9 +117,7 @@
 									</li>
 									<li>
 										<label>Time series
-											<select id="timeSeries_2">
-												<option>Select</option>
-											</select>
+											<select id="timeSeries_2"></select>
 										</label>
 									</li>
 									<li><a href="#" id="go">Go</a></li>
@@ -136,9 +128,7 @@
 						<div class="segments">
 							<ul>
 								<li>										
-									<select id="ByTravelStat_1">
-										<option>Select</option>
-									</select>	
+									<select id="ByTravelStat_1"></select>	
 								</li>
 								<li>										
 									<select id="ByTravelStat_2" multiple="multiple"></select>
