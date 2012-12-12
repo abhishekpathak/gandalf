@@ -22,7 +22,7 @@ a{ text-decoration:none}
 			.tabs li{ float:left; text-align:center; background:#6991c3; margin:0 4px 0 0;}
 			.tabs li a{ text-decoration:none; color:#fff; font-size:0.875em; padding:8px 20px 5px; display:block; border-top:6px solid #c3c3c3}
 			.tabs li a:hover, .tabs li a.selected{ color:#333; background:#fff; border-top:6px solid #fff}
-		#tabContent{ /*margin:36px 19px 0 23px; change it back once tabs are enabled*/ width:955px; margin:60px 19px 0 23px }
+		#tabContent{ margin:36px 19px 0 23px; width:955px; overflow:hidden /*margin:60px 19px 0 23px*/ }
 
 			#bookingResults{ overflow:hidden; margin-bottom:25px}
 				#bookingResults h2{ padding-bottom:5px}
@@ -34,8 +34,8 @@ a{ text-decoration:none}
 				#bookingResults small, .ov_Report small{font-size:0.932em; padding-left:15px; display:block}
 				.ov_Report small{font-size:1.25em !important}
 				#bookingResults small, .ov_Report small{ background:url(../images/sprite.gif) no-repeat}
-				#bookingResults small.inc{color:#489823; background-position:0 -20px;}
-				#bookingResults small.dec{color:#cc3333; background-position:0 0}
+				#bookingResults small.inc{color:#489823; background-position:0 -17px;}
+				#bookingResults small.dec{color:#cc3333; background-position:0 4px}
 				.ov_Report small.inc{color:#489823; background-position:0 -54px}
 				.ov_Report small.dec{color:#cc3333; background-position:0 -33px}
 		.segments{ border:1px solid #e1e1e1; background:#f8f7f5; margin-bottom:16px; padding:2px 0px; width:100%; float:left}
@@ -60,7 +60,7 @@ a{ text-decoration:none}
 					.ov_Report h4{font-size:0.935em; color:#666; padding-bottom:12px}
 					.ov_Report em{ font-style:normal; color:#333; font-size:1.875em; padding:0 0 3px 0}
 					.ov_Report a.view{color: #3366ff; font-size:0.688em; float:right; text-decoration:none; margin-top:24px}						
-			.ov_graph{ width:99.8%; border:1px solid #ebe8eb; border-radius:3px; float:left;}
+			.ov_graph_home{ width:99.8%; border:1px solid #ebe8eb; border-radius:3px; float:left;}
 			.ov_graph{ width:466px; height:283px}				
 				.ov_graph h4, #ov_chart li h4{color:#666; font-size:0.875em; padding:12px}
 			#ov_chart{ overflow:hidden; clear:both; position:relative}

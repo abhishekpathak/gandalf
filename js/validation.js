@@ -345,6 +345,7 @@ function changeparams(mart){
 			console.log(response);
 	        listoflists.unshift([dim,params[key].set1.metric,'sometext']);
 			id = 'pie_chart'+response.extra;
+
 			$('#ov_chart').append('<li><h4>'+extra[mart][response.extra].metric+' contribution</h4><div id='+id+'></div></li>');
 			drawChart(listoflists, extra[mart][response.extra].charttype, id, pieOpt);
         });    

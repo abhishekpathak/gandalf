@@ -1,10 +1,20 @@
 ga_analytics  = {
-
 //load mart
 loadMart : function()
-{
+{	var arrtempKey = new Array();
 	for(var i = 0; i < template.length; i++)
-	$('.mainNav').append('<li><a href="#">'+template[i][0]+'</a></li>');
+	{	
+	var tempKey = template[i][0];	
+	arrtempKey.push(tempKey);
+	var keyToString = arrtempKey.toString();
+	var tempitems = keyToString.split(',');	
+
+	//$('.mainNav').append('<li><a href="#">'+template[i][0]+'</a></li>');
+	var ov_bookRes_template = _.template($('#ov_bookRes_template').html());	
+	var ov_bookRes_summary = ov_bookRes_template({'mart':tempitems});
+	$('#bookingResults ul').html(ov_bookRes_summary);
+	//$('#bookingResults ul').append('<li><h3>'+template[i][0]+'</h3><em><img src="../images/ajax-loader.gif"/></em><small></small></li>');
+	}
 	$('.mainNav li:first').addClass('active');
 	this.getSelectBoxData();	
 },
@@ -13,12 +23,12 @@ loadchangeparams : function()
 {	
 	$('.ov_Report li').find('em').html('<img src="../images/ajax-loader.gif"/>');	
 	$('.ov_Report li').find('small').text('');	
-	var mart = $('.mainNav li.active a').text();
+	var mart = $('.mainNav li.active a').attr('id');
 	changeparams(mart);
 },
 getSelectBoxData : function()
 {			
-	var currentVal = $('.mainNav li.active a').text();
+	var currentVal = $('.mainNav li.active a').attr('id');
 		//main(currentVal);
 		
 		for(var i = 0; i < template.length; i++) {			
@@ -32,10 +42,10 @@ getSelectBoxData : function()
 					var str = template[i][1][j];
 					loadSelectBox('#metrics');
 					loadSelectBox('#metrics_2');					
-					//$('.ov_Report ul').append('<li><h4>'+template[i][1][j]+'</h4><em><img src="../images/ajax-loader.gif"/></em><small></small></li>');
-					var ov_Report_template = _.template($('#ov_Report_template').html());	
+					$('.ov_Report ul').append('<li><h4>'+template[i][1][j]+'</h4><em><img src="../images/ajax-loader.gif"/></em><small></small></li>');
+					/*var ov_Report_template = _.template($('#ov_Report_template').html());	
 					var ov_Report_summary = ov_Report_template({'metrics':tempMetrics});
-					$('.ov_Report ul').html(ov_Report_summary);
+					$('.ov_Report ul').html(ov_Report_summary);*/
 				}
 				//timeSeries selectbox
 				$('#timeSeries, #timeSeries_2').children().remove();
@@ -68,31 +78,29 @@ getSelectBoxData : function()
 initDoc : function(){
 	this.getSelectBoxData();
 	this.loadMart();
-	var mart = $('.mainNav li.active a').text();
+	var mart = $('.mainNav li.active a').attr('id');
 	$('#compare').attr('checked',false);
 	$('#segments_2').hide();
 	if($('#line_chart').is(':empty'))			
 		$('#line_chart').html('<img src="../images/ajax-loader.gif"/>');
 	
 	//tabs
-	$("#tabContent > div").hide();
-	$("#tabContent > div:first").show();
+	/*$("#tabContent > div").hide();
+	$("#tabContent > div:first").show();*/
 	$('.tabs li a:first').addClass('selected');
 	$('.tabs li a').click(function(){
 		$('.tabs li a').removeClass('selected');
 		$(this).addClass('selected');
-		$('#tabContent > div').hide();
+		/*$('#tabContent > div').hide();
 		var currentTab = $(this).attr('href');		
-		$(currentTab).show();		
+		$(currentTab).show();*/	
 	});		
 	//mainNav
-	$('.mainNav li').click(function(){
-		params = init_params();
+	$('.mainNav li').click(function(){				
 		$('.mainNav li').removeClass('active');
 		$(this).addClass('active');
 		ga_analytics.getSelectBoxData();		
-		//ga_analytics.loadchangeparams();
-	    var mart = $('.mainNav li.active a').text();
+		ga_analytics.loadchangeparams();
 		main(mart);
 	});
 	$('#ByTravelStat_1').change(function(){	
@@ -186,7 +194,7 @@ initDoc : function(){
        $('.date-range-field, .date-range-field_2').css({borderBottomLeftRadius:5, borderBottomRightRadius:5});
        $('.date-range-field a, .date-range-field_2 a').css({borderBottomRightRadius:5});
 		if(!$('#compare').is(':checked')){		
-			mart = $('.mainNav li.active a').text();
+			mart = $('.mainNav li.active a').attr('id');
 			changeparams(mart);					
 			main(mart)
 		}
