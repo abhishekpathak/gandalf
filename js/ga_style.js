@@ -10,10 +10,13 @@ loadMart : function()
 	var tempitems = keyToString.split(',');	
 
 	//$('.mainNav').append('<li><a href="#">'+template[i][0]+'</a></li>');
-	var ov_bookRes_template = _.template($('#ov_bookRes_template').html());	
-	var ov_bookRes_summary = ov_bookRes_template({'mart':tempitems});
-	$('#bookingResults ul').html(ov_bookRes_summary);
-	//$('#bookingResults ul').append('<li><h3>'+template[i][0]+'</h3><em><img src="../images/ajax-loader.gif"/></em><small></small></li>');
+	/*if($('#ov_bookRes_template')){
+		console.log('mart');
+		var ov_bookRes_template = _.template($('#ov_bookRes_template').html());	
+		var ov_bookRes_summary = ov_bookRes_template({'mart':tempitems});		
+		$('#bookingResults ul').html(ov_bookRes_summary);
+	}*/
+	$('#bookingResults ul').append('<li><h3>'+template[i][0]+'</h3><em><img src="../images/ajax-loader.gif"/></em><small></small></li>');
 	}
 	$('.mainNav li:first').addClass('active');
 	this.getSelectBoxData();	
@@ -42,10 +45,10 @@ getSelectBoxData : function()
 					var str = template[i][1][j];
 					loadSelectBox('#metrics');
 					loadSelectBox('#metrics_2');					
-					$('.ov_Report ul').append('<li><h4>'+template[i][1][j]+'</h4><em><img src="../images/ajax-loader.gif"/></em><small></small></li>');
-					/*var ov_Report_template = _.template($('#ov_Report_template').html());	
-					var ov_Report_summary = ov_Report_template({'metrics':tempMetrics});
-					$('.ov_Report ul').html(ov_Report_summary);*/
+					//$('.ov_Report ul').append('<li><h4>'+template[i][1][j]+'</h4><em><img src="../images/ajax-loader.gif"/></em><small></small></li>');
+					var ov_Report_template = _.template($('#ov_Report_template').html());	
+					var ov_Report_summary = ov_Report_template({'metrics':tempMetrics});					
+					$('.ov_Report ul').html(ov_Report_summary);
 				}
 				//timeSeries selectbox
 				$('#timeSeries, #timeSeries_2').children().remove();
@@ -86,15 +89,15 @@ initDoc : function(){
 	
 	//tabs
 	/*$("#tabContent > div").hide();
-	$("#tabContent > div:first").show();*/
+	$("#tabContent > div:first").show();
 	$('.tabs li a:first').addClass('selected');
 	$('.tabs li a').click(function(){
 		$('.tabs li a').removeClass('selected');
 		$(this).addClass('selected');
-		/*$('#tabContent > div').hide();
+		$('#tabContent > div').hide();
 		var currentTab = $(this).attr('href');		
-		$(currentTab).show();*/	
-	});		
+		$(currentTab).show();
+	});		*/	
 	//mainNav
 	$('.mainNav li').click(function(){				
 		$('.mainNav li').removeClass('active');
