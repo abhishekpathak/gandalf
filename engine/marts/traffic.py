@@ -2,7 +2,7 @@ database = 'goibibo'
 martname = 'ga_visitors'
 
 metrics = {
-        'visitors':{
+        'unique visitors':{
             'real_name' : 'visitors',
             'aggregation_options' : ['STANDARD','SUM']
         },
@@ -14,26 +14,15 @@ metrics = {
             'real_name' : 'bounces',
             'aggregation_options' : ['STANDARD','SUM']
         },
-         'goal 1 completions' : {
-            'real_name' : 'goal_completions_1',
-            'aggregation_options' : ['STANDARD','SUM']
-        },
-         'goal 2 completions' : {
-            'real_name' : 'goal_completions_2',
-            'aggregation_options' : ['STANDARD','SUM']
-        },
-         'goal 4 completions' : {
-            'real_name' : 'goal_completions_4',
-            'aggregation_options' : ['STANDARD','SUM']
-        },
-         'goal 7 completions' : {
-            'real_name' : 'goal_completions_7',
-            'aggregation_options' : ['STANDARD','SUM']
-        },
-         'all goal completions' : {
+         'conversions' : {
             'real_name' : 'goal_completions_all',
             'aggregation_options' : ['STANDARD','SUM']
         },
+         'new visitors': {
+             'real_name': 'visitors',
+             'aggregation_options' : ['STANDARD','SUM'],
+             'persistantfilter' : {'visitortype':'new_visitor'}
+        }
     }
 
 dimensions = {

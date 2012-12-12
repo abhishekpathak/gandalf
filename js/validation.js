@@ -39,7 +39,7 @@
 					['airline','source','destination','sector','city','status','typeoftravel','roundtrip','discountedroundtrip','promocodename','amadeusvendor','paymentgateway','promocodetype','flavor'],
                 ],
                 ['traffic_all',
-                    ['visitors','visits','bounces'],
+                    ['unique visitors','visits','bounces','new visitors','conversions'],
                     ['visitdate'],
 					['source','medium','visitortype','category'],
                 ],
@@ -55,61 +55,72 @@ var pieOpt = {
 function init_params(){
     p = {};
 
-    p['Flights'] = {
+    p['financial_all'] = {
             'set1' : {'mart':'flight_paymentdetails','metric':'tickets','timeseries':'bookingtime','timerange':t1},
             'persistantfilter' : {'typeoftravel':'Domestic'},
              };
-    p['Flights(intl)'] = {
+    p['financial_d_flights'] = {
+            'set1' : {'mart':'flight_paymentdetails','metric':'tickets','timeseries':'bookingtime','timerange':t1},
+            'persistantfilter' : {'typeoftravel':'Domestic'},
+             };
+    p['financial_i_flights'] = {
             'set1' : {'mart':'flight_paymentdetails','metric':'tickets','timeseries':'bookingtime','timerange':t1},
             'persistantfilter' : {'typeoftravel':'International'},
             };
-    p['Bus'] = {
+    p['financial_bus'] = {
             'set1' : {'mart':'bus_paymentdetails','metric':'tickets','timeseries':'timeoftransaction','timerange':t1},
             };
-    p['Hotels'] = {
+    p['financial_hotels'] = {
             'set1' : {'mart':'hotel_paymentdetails','metric':'Room Nights','timeseries':'bookingtime','timerange':t1},
              };
-    p['Users'] = {
+    p['users_all'] = {
             'set1' : {'mart':'users','metric':'users count','timeseries':'last_login','timerange':t1},
              };
-    p['Cancellations'] = {
+    p['financial_cancellations'] = {
             'set1' : {'mart':'cancellations','metric':'tickets','timeseries':'refund_time','timerange':t1},
             };
-    p['Traffic'] = {
-            'set1' : {'mart':'traffic','metric':'visitors','timeseries':'visitdate','timerange':t1},
+    p['traffic_all'] = {
+            'set1' : {'mart':'traffic','metric':'unique visitors','timeseries':'visitdate','timerange':t1},
             }; 
     return p;
 }  
 extra = {
-        'Flights':          {
+        'flights_all':          {
                             'e1': {'metric':'tickets','charttype':'PieChart'},
                             'e2': {'metric':'GMV','charttype':'PieChart'},
                             },
-        'Flights(intl)' :   {
+
+        'financial_d_flights':          {
                             'e1': {'metric':'tickets','charttype':'PieChart'},
                             'e2': {'metric':'GMV','charttype':'PieChart'},
                             },
-        'Hotels':           {
+        'financial_i_flights' :   {
+                            'e1': {'metric':'tickets','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            },
+        'financial_hotels':           {
                             'e1': {'metric':'Room Nights','charttype':'PieChart'},
                             'e2': {'metric':'GMV','charttype':'PieChart'},
                             },
-        'Bus':              {
+        'financial_bus':              {
                             'e1': {'metric':'tickets','charttype':'PieChart'},
                             'e2': {'metric':'GMV','charttype':'PieChart'},
                             },
-        'Users':            {
+        'users_all':            {
                             'e1': {'metric':'flight transactions','charttype':'PieChart'},
                             'e2': {'metric':'bus transactions','charttype':'PieChart'},
                             'e3': {'metric':'hotel transactions','charttype':'PieChart'},
                             },
-        'Cancellations':    {
+        'financial_cancellations':    {
                             'e1': {'metric':'tickets','charttype':'PieChart'},
                             'e2': {'metric':'GMV','charttype':'PieChart'},
                             },                            
-        'Traffic' :         {
-                            'e1': {'metric':'visitors','charttype':'PieChart'},
-                            'e2': {'metric':'visits','charttype':'PieChart'},
-                            'e3': {'metric':'bounces','charttype':'PieChart'},
+        'traffic_all' :         {
+                            'e1': {'metric':'visits','dimension':'source','charttype':'PieChart'},
+                            //'e2': {'metric':'visits','dimension':'source','charttype':'ColumnChart'},
+                            'e3': {'metric':'conversions','dimension':'source','charttype':'PieChart'},
+                            'e4': {'metric':'unique visitors','dimension':'source','charttype':'PieChart'},
+                            'e5': {'metric':'unique visitors','dimension':'visitortype','charttype':'PieChart'},
                             },
         };
 
@@ -262,6 +273,7 @@ function changeparams(mart){
     if ((dim_value != null) && (dim_value[0] != "All")){
         for (i = 0 ; i < dim_value.length ; i++) 
             dim_value[i] = dim_value[i].replace('_',' ');
+        params[key].persistantfilter = {};
         if (dim_value.length > 1) 
             params[key].persistantfilter[dim] = {'$in' : dim_value} 
         else 
@@ -321,21 +333,25 @@ function changeparams(mart){
   
   function load_extra(mart){
     p = params[mart];
-    var dim = $('#ByTravelStat_1').val();
-    p.dimensions = [dim];
+    console.log(p.persistantfilter);
     p.summarize_number = 7;		
 	$('#ov_chart li').remove();
     for (var e in extra[mart]) {		
         p.set1.metric = extra[mart][e].metric;
+        p.dimensions = [extra[mart][e].dimension];
         handler.get_details(p,e).done(function(response){
-            listoflists = response.results[dim];
+            listoflists = response.results[extra[mart][response.extra].dimension];
 	        listoflists.unshift([dim,params[key].set1.metric,'sometext']);
 			id = 'pie_chart'+response.extra;
-
-			$('#ov_chart').append('<li><h4>'+extra[mart][response.extra].metric+' contribution</h4><div id='+id+'></div></li>');
+			$('#ov_chart').append('<li><h4>'+extra[mart][response.extra].metric+'-by '+extra[mart][response.extra].dimension+'</h4><div id='+id+'></div></li>');
 			drawChart(listoflists, extra[mart][response.extra].charttype, id, pieOpt);
         });    
     }
+    p.set1.metric = $('#metrics').val();
+    var dim = $('#ByTravelStat_1').val();
+    p.dimensions = [dim];
+    p.summarize_number = 1;
+
 }
 
 // load data in the list box
