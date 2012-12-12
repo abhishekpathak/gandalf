@@ -52,9 +52,9 @@
                 ],
                 */
                 ['Traffic',
-                    ['visitors','visits','bounces','all goal completions','goal 1 completions','goal 2 completions','goal 4 completions','goal 7 completions'],
+                    ['visitors','visits','bounces'],
                     ['visitdate'],
-					['category','medium','source','visitortype'],
+					['source','medium','visitortype','category'],
                 ],
 
      ];
@@ -342,7 +342,6 @@ function changeparams(mart){
         p.set1.metric = extra[mart][e].metric;
         handler.get_details(p,e).done(function(response){
             listoflists = response.results[dim];
-			console.log(response);
 	        listoflists.unshift([dim,params[key].set1.metric,'sometext']);
 			id = 'pie_chart'+response.extra;
 
