@@ -109,7 +109,8 @@ initDoc : function(){
 	$('#ByTravelStat_1').change(function(){	
 		$('#ByTravelStat_2').removeAttr('multiple').css('background-color','#efefef');
 		get_list_box(mart);		
-		//load_extra(mart);
+        if (extra[mart]['e1'].dimension == "DYNAMIC")
+		    load_extra(mart);
 	});	
 	$('#set').click(function(){				
 		var val = $('#ByTravelStat_2').val();

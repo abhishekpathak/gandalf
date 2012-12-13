@@ -2,19 +2,19 @@
     var template =
     [
                 ["financial_all",
-                    ['tickets','GMV','Gross Margin','Promocode','Commission'],
+                    ['tickets','GMV','Earnings from ticket'],
                     ['bookingtime','traveltime'],
 					['airline','sector','city','typeoftravel','roundtrip','discountedroundtrip','promocodename','paymentgateway','promocodetype','flavor'],
 
                 ],
                 ["financial_d_flights",
-                    ['tickets','GMV','Gross Margin','Promocode','Commission'],
+                    ['tickets','GMV','Earnings from ticket'],
                     ['bookingtime','traveltime'],
 					['airline','sector','city','typeoftravel','roundtrip','discountedroundtrip','promocodename','paymentgateway','promocodetype','flavor'],
 
                 ],
                 ["financial_i_flights",
-                    ['tickets', 'GMV','Promocode'],
+                    ['tickets', 'GMV'],
                     ['bookingtime','traveltime'],
 					['airline','sector','city','typeoftravel','roundtrip','discountedroundtrip','promocodename','paymentgateway','promocodetype','flavor'],
                 ],
@@ -85,26 +85,26 @@ function init_params(){
     return p;
 }  
 extra = {
-        'flights_all':          {
-                            'e1': {'metric':'tickets','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
+        'financial_all':      {
+                            'e1': {'metric':'tickets','dimension':'DYNAMIC','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','dimension':'DYNAMIC','charttype':'PieChart'},
                             },
 
         'financial_d_flights':          {
-                            'e1': {'metric':'tickets','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            'e1': {'metric':'tickets','dimension':'DYNAMIC','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','dimension':'DYNAMIC','charttype':'PieChart'},
                             },
         'financial_i_flights' :   {
-                            'e1': {'metric':'tickets','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            'e1': {'metric':'tickets','dimension':'DYNAMIC','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','dimension':'DYNAMIC','charttype':'PieChart'},
                             },
         'financial_hotels':           {
-                            'e1': {'metric':'Room Nights','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            'e1': {'metric':'Room Nights','dimension':'DYNAMIC','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','dimension':'DYNAMIC','charttype':'PieChart'},
                             },
         'financial_bus':              {
-                            'e1': {'metric':'tickets','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            'e1': {'metric':'tickets','dimension':'DYNAMIC','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','dimension':'DYNAMIC','charttype':'PieChart'},
                             },
         'users_all':            {
                             'e1': {'metric':'flight transactions','charttype':'PieChart'},
@@ -112,8 +112,8 @@ extra = {
                             'e3': {'metric':'hotel transactions','charttype':'PieChart'},
                             },
         'financial_cancellations':    {
-                            'e1': {'metric':'tickets','charttype':'PieChart'},
-                            'e2': {'metric':'GMV','charttype':'PieChart'},
+                            'e1': {'metric':'tickets','dimension':'DYNAMIC','charttype':'PieChart'},
+                            'e2': {'metric':'GMV','dimension':'DYNAMIC','charttype':'PieChart'},
                             },                            
         'traffic_all' :         {
                             'e1': {'metric':'visits','dimension':'source','charttype':'PieChart'},
@@ -333,18 +333,21 @@ function changeparams(mart){
   
   function load_extra(mart){
     p = params[mart];
-    console.log(p.persistantfilter);
     p.summarize_number = 7;		
 	$('#ov_chart li').remove();
     for (var e in extra[mart]) {		
         p.set1.metric = extra[mart][e].metric;
-        p.dimensions = [extra[mart][e].dimension];
-        handler.get_details(p,e).done(function(response){
-            listoflists = response.results[extra[mart][response.extra].dimension];
+        if (extra[mart][e].dimension == "DYNAMIC")
+            dimension = $('#ByTravelStat_1').val()
+        else
+            dimension = extra[mart][e].dimension
+        p.dimensions = [dimension]
+        handler.get_details(p,[e,dimension]).done(function(response){
+            listoflists = response.results[response.extra[1]];
 	        listoflists.unshift([dim,params[key].set1.metric,'sometext']);
 			id = 'pie_chart'+response.extra;
-			$('#ov_chart').append('<li><h4>'+extra[mart][response.extra].metric+'-by '+extra[mart][response.extra].dimension+'</h4><div id='+id+'></div></li>');
-			drawChart(listoflists, extra[mart][response.extra].charttype, id, pieOpt);
+			$('#ov_chart').append('<li><h4>'+extra[mart][response.extra[0]].metric+'-by '+response.extra[1]+'</h4><div id='+id+'></div></li>');
+			drawChart(listoflists, extra[mart][response.extra[0]].charttype, id, pieOpt);
         });    
     }
     p.set1.metric = $('#metrics').val();

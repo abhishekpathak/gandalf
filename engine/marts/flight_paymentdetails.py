@@ -11,9 +11,10 @@ metrics = {
         'aggregation_options' : ['STANDARD','SUM'],
         },
     'Gross Margin' : {
-        'real_name' : 'totalcommission+promocodediscount+extradiscount+transactionfee+discount+leadamount-0.017*totalfarebeforediscount',
+        'real_name' : 'totalcommission+promocodediscount+extradiscount+transactionfee+discount+leadamount-0.017*totalfarecharged+gdsfees',
         'aggregation_options' : ['STANDARD','SUM'],
-        },        
+        'extra filters' : {'status':'To Deliver'}
+        },
     'Promocode' : {
         'real_name' : '0-promocodediscount-extradiscount',
         'aggregation_options' : ['STANDARD','SUM'],
@@ -25,6 +26,11 @@ metrics = {
     'Commission' : {
         'real_name' : 'totalcommission',
         'aggregation_options' : ['STANDARD','SUM'],
+        },
+    'Earnings from ticket' : {
+        'real_name' : 'totalcommission+promocodediscount+extradiscount+discount+leadamount+transactionfee+gdsfees',
+        'aggregation_options' : ['STANDARD','SUM'],
+        'extra filters' : {'status': 'To Deliver'}
         },
     }
 
